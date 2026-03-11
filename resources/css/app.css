@@ -1,4 +1,5 @@
 @import "./custom.css";
+@import 'datatables.net-dt/css/dataTables.dataTables.css';
 
 @tailwind base;
 @tailwind components;
