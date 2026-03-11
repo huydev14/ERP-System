@@ -2,7 +2,7 @@
 <nav class="header !tw-justify-between navbar navbar-expand navbar-white navbar-light tw-shadow-md">
     <div class="header-left tw-flex tw-flex-row tw-justify-between tw-px-2">
         <!-- Brand Logo -->
-        <a href="{{ url('/dashboard') }}" class="tw-flex tw-items-center tw-gap-2">
+        <a href="/" class="tw-flex tw-items-center tw-gap-2">
             <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
                 class="brand-image img-circle shadow-sm tw-w-10 tw-h-10 style="opacity: .8">
             <span class="text-dark tw-block"">{{ config('app.name') }}</span>
