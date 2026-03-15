@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('fullname')->nullable();
             $table->string('phone')->nullable();
-            
+
             $table->string('address')->nullable();
             $table->string('source')->nullable();
 
-            $table->unsignedTinyInteger('lassify')->default(0)->comment('0: hết hàng, 1: còn hàng');
+            $table->unsignedTinyInteger('classify')->default(0)->comment('0: hết hàng, 1: còn hàng');
             $table->string('product_sale')->nullable();
 
             $table->unsignedTinyInteger('scale')->default(0)->comment('0: nhỏ, 1: vừa, 2: lớn');

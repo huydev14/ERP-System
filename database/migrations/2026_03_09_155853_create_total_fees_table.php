@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('day')->nullable();
             $table->string('content')->nullable();
             $table->integer('money')->nullable();
-            $table->foreignId('type_fee_id')->nullable()->constrained('type_fees')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('fee_type_id')->nullable()->constrained('fee_types')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('atm_id')->nullable()->constrained('atms')->cascadeOnUpdate()->nullOnDelete();
 
             $table->timestamps();

@@ -22,17 +22,17 @@ return new class extends Migration
             $table->string('name')->nullable();
 
             $table->foreignId('sale_user_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('part_id')->nullable()->constrained('parts')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('team_id')->nullable()->constrained('teams')->cascadeOnUpdate()->nullOnDelete();
 
             $table->string('account_social')->nullable();
 
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('support_user_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
-            
-            $table->unsignedTinyInteger('type_arrange')->default(0)->comment('0: mới, 1: cũ');
+
+            $table->unsignedTinyInteger('arrange_type')->default(0)->comment('0: mới, 1: cũ');
             $table->unsignedTinyInteger('result')->default(0)->comment('0: chưa bốc, 1: hoàn thành, 2: fail');
-            $table->text('reason_fail')->nullable();
+            $table->text('fail_reason')->nullable();
             $table->integer('total_arrange')->nullable();
 
             $table->timestamps();

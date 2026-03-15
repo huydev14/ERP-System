@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Models\Part;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -19,22 +18,26 @@ class User extends Authenticatable implements JWTSubject
      * @var list<string>
      */
     protected $fillable = [
+
         'name',
         'email',
         'password',
         'refresh_token',
-        'birthday',
-        'sex',
-        'part_id',
+
+        'account_type_id',
+        'department_id',
         'position_id',
-        'type_work',
         'team_id',
+
+        'employment_type',
+        'status',
+        'start_date',
+        'end_date',
+
+        'gender',
+        'birthday',
         'phone',
         'address',
-        'status',
-        'start_day',
-        'end_day',
-        'type_account_id',
     ];
 
     /**
@@ -73,8 +76,9 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function part(){
-        return $this->belongsTo(Part::class, 'part_id');
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function position()
@@ -87,7 +91,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Team::class, 'team_id');
     }
 
-    public function typeAccount(){
-        return $this->belongsTo(TypeAccount::class, 'type_account_id');
+    public function accountType()
+    {
+        return $this->belongsTo(AccountType::class, 'account_type_id');
     }
 }

@@ -8,7 +8,7 @@ class Team extends Model
 {
     protected $fillable = [
         'name',
-        'part_id'
+        'department_id'
     ];
 
     public function users()
@@ -16,7 +16,7 @@ class Team extends Model
         return $this->hasMany(User::class, 'team_id');
     }
 
-    public function part(){
-        return $this->belongsTo(Part::class, 'part_id');
+    public function department(){
+        return $this->belongsTo(Department::class, 'department_id');
     }
 }

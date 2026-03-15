@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('storages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('shipment_id')->nullable()->constrained('shipments')->cascadeOnUpdate()->nullOnDelete();
-            $table->string('name_storage')->nullable();
+            $table->string('storage_name')->nullable();
 
             $table->timestamps();
         });

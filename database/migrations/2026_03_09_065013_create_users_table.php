@@ -13,29 +13,32 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+
+            // User Credentials
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->rememberToken()->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken()->nullable();
 
-            $table->date('birthday')->nullable();
-            $table->unsignedTinyInteger('sex')->default(0)->comment('O: nam, 1: nữ');
-
-            $table->foreignId('part_id')->nullable()->constrained('parts')->cascadeOnUpdate()->nullOnDelete();
+            // Organization structure
+            $table->foreignId('account_type_id')->nullable()->constrained('account_types')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('position_id')->nullable()->constrained('positions')->cascadeOnUpdate()->nullOnDelete();
-
-            $table->unsignedTinyInteger('type_work')->default(0)->comment('O: full-time, 1: part-time');
-
             $table->foreignId('team_id')->nullable()->constrained('teams')->cascadeOnUpdate()->nullOnDelete();
 
-            $table->string('phone')->nullable();
-            $table->string('address')->nullable();
+            // Employment details
+            $table->unsignedTinyInteger('employment_type')->default(0)->comment('O: full-time, 1: part-time');
             $table->unsignedTinyInteger('status')->default(0)->comment('O: đang làm, 1: nghỉ việc');
             $table->dateTime('start_day')->nullable();
             $table->dateTime('end_day')->nullable();
 
-            $table->foreignId('type_account_id')->nullable()->constrained('type_accounts')->cascadeOnUpdate()->nullOnDelete();
+            // Personal info
+            $table->unsignedTinyInteger('gender')->default(0)->comment('O: nam, 1: nữ');
+            $table->date('birthday')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+
             $table->timestamps();
         });
     }
