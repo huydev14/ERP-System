@@ -34,6 +34,10 @@ class AuthenticatedSessionController extends Controller
 
         $user->update(['refresh_token' => $refreshToken]);
 
+        // Save refresh token to DB
+        $user->refresh_token = $refreshToken;
+        $user->save();
+
         return redirect()->intended(route('dashboard', absolute: false))
             ->withCookies([
                 cookie('access_token', $accessToken, config('jwt.ttl')),
