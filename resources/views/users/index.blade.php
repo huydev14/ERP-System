@@ -121,14 +121,23 @@
                 },
                 layout: {
                     topStart: 'pageLength',
-                    topEnd: {
-                        search: {
-                            placeholder: 'Tìm kiếm nhân viên...'
-                        }
-                    },
+                    topEnd: [
+                        {
+                            search: {
+                                placeholder: 'Tìm kiếm nhân viên...'
+                            }
+                        },
+                        $(`<div class="dt-toolbar d-flex">
+                                <select id="f_status" class="form-select"><option value="">Trạng thái</option></select>
+                                <select id="f_department" class="form-select"><option value="">Bộ phận</option></select>
+                                <select id="f_team" class="form-select"><option value="">Đội nhóm</option></select>
+                                <select id="f_account_type" class="form-select"><option value="">Loại tài khoản</option></select>
+                                <button id="btn-clear-filters" class="btn btn-sm">Xoá lọc</button>
+                            </div>`)
+                    ],
                     bottomStart: 'info',
                     bottomEnd: 'paging',
-                }
+                },
             });
         });
     </script>
