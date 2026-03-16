@@ -150,7 +150,7 @@
             </li>
 
             {{-- Profile --}}
-            <li class="nav-item dropdown tw-transition tw-duration-500 hover:!tw-bg-gray-100 tw-rounded-lg">
+            <li class="nav-item dropdown tw-transition tw-duration-100 hover:!tw-bg-gray-200 tw-rounded-lg">
                 <a data-toggle="dropdown" href="#" class="!tw-h-full tw-flex tw-items-center">
                     <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}"
                         class="img-circle elevation-2 mr-2 tw-object-cover tw-w-8 tw-h-8" alt="User">
@@ -173,10 +173,28 @@
                 </div>
             </li>
 
-
+            {{-- Language switcher --}}
+            <li class="nav-item dropdown" style="min-width: 50px !important; text-align: center !important;">
+                <a href="#" data-toggle="dropdown" class="nav-link">
+                    @if (App::getLocale() == 'vi')
+                        <span class="fi fi-vn"></span>
+                    @else
+                        <span class="fi fi-gb"></span>
+                    @endif
+                    <i class="fas fa-caret-down ml-1"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right p-0">
+                    <a href="{{ route('lang.switch', 'vi') }}"
+                        class="dropdown-item {{ App::getLocale() == 'vi' ? 'active' : '' }}">
+                        <span class="fi fi-vn"></span> Tiếng Việt
+                    </a>
+                    <a href="{{ route('lang.switch', 'en') }}"
+                        class="dropdown-item {{ App::getLocale() == 'en' ? 'active' : '' }}">
+                        <span class="fi fi-gb"></span> English
+                    </a>
+                </div>
+            </li>
         </ul>
-
     </div>
-
 </nav>
 <!-- /.navbar -->

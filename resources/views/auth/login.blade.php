@@ -41,7 +41,7 @@
             </label>
         </div>
 
-        <div class="tw-flex tw-items-center tw-justify-end tw-mt-4">
+        <div class="tw-flex tw-items-center tw-justify-between tw-mt-4">
             @if (Route::has('password.request'))
                 <a class="tw-underline tw-text-sm tw-text-gray-600 hover:tw-text-gray-900 tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-offset-2 focus:tw-ring-indigo-500"
                     href="{{ route('password.request') }}">
@@ -49,9 +49,24 @@
                 </a>
             @endif
 
-            <x-primary-button class="tw-ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <div
+                class="tw-flex tw-p-2 tw-items-center tw-gap-2 tw-text-sm tw-transition tw-duration-100 hover:!tw-bg-gray-200 tw-rounded-lg">
+                @if (App::getLocale() == 'vi')
+                    <a href="{{ route('lang.switch', 'en') }}">
+                        <span class="fi fi-gb"></span> English
+                    </a>
+                @else
+                    <a href="{{ route('lang.switch', 'vi') }}">
+                        <span class="fi fi-vn"></span> Tiếng Việt
+                    </a>
+                @endif
+            </div>
+
+            {{-- Login button --}}
+            <div><x-primary-button class="tw-ms-3">
+                    {{ __('Log in') }}
+                </x-primary-button>
+            </div>
         </div>
     </form>
 </x-guest-layout>
