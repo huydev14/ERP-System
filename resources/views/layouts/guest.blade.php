@@ -13,7 +13,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 
 <body class="tw-font-sans tw-text-gray-900 tw-antialiased">
