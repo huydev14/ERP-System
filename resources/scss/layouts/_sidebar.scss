@@ -3,26 +3,42 @@
 .sidebar {
     background: $surface-color !important;
     height: 100%;
-    padding-left: 0px !important;
+    padding-left: 5px !important;
     padding-right: 0px !important;
     border-right: 1px solid $border-subtle;
 
     .nav-link {
+        position: relative;
         color: $text-main !important;
         border-radius: 4px;
         font-size: 14px;
+
+        &:hover {
+            background: $hover-bg;
+            color: $text-hover !important;
+        }
+
+        &.active {
+            background: #fff !important;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 2px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 18px;
+                background-color: $brand-primary;
+                border-radius: 2px;
+            }
+        }
     }
 
     .nav-sidebar > .nav-item .nav-icon {
         font-size: 0.9rem !important;
     }
 
-    .nav-link:hover {
-        background: $hover-bg;
-        color: $text-hover !important;
-    }
-
-    .nav-link.active,
     .menu-open > .nav-link {
         background: #fff !important;
     }
@@ -31,10 +47,10 @@
         margin-left: 18px;
         font-size: 13px;
         color: $text-subtle !important;
-    }
 
-    .nav-treeview > .nav-item > .nav-link:hover {
-        background: $hover-bg-strong;
-        color: $text-hover !important;
+        &:hover {
+            background: $hover-bg-strong;
+            color: $text-hover !important;
+        }
     }
 }
