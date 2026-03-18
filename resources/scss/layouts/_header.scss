@@ -1,7 +1,7 @@
 @use '../base/variables' as *;
 
 .topbar {
-    background: #002050;
+    background: $navy-blue;
     min-height: 54px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     padding: 0 10px;
@@ -69,7 +69,7 @@
 
 .search-input:focus {
     box-shadow: none;
-    border-color: $brand-primary;
+    border-color: $blue;
 }
 
 .topbar-actions {

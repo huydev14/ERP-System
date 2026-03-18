@@ -1,12 +1,13 @@
 @use '../base/variables' as *;
 
 .footer {
-    grid-area: footer;
     border-top: 1px solid $border-subtle;
     background: #fff;
     color: $text-subtle;
+    
+    padding: 10px 13px !important;
 
     a {
-        color: $brand-primary;
+        color: $navy-blue;
     }
 }
