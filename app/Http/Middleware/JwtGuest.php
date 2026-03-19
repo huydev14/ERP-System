@@ -23,7 +23,7 @@ class JwtGuest
                 return redirect()->back();
 
             } catch (\Exception $e){
-                Log::error('Token error', $e->getMessage());
+                Log::error('Token error'. $e->getMessage());
             }
         }
 
