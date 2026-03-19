@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             PositionSeeder::class,
             TeamSeeder::class,
-            
             UserSeeder::class,
+            RolesAndPermissionsSeeder::class,
         ]);
     }
 }
