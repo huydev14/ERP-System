@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 // Lang switch
 Route::get('lang/{locale}', function ($locale){
@@ -30,4 +31,8 @@ Route::middleware('jwt.cookie')->prefix('users')->name('users.')->group(function
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('/data', [UserController::class, 'data'])->name('data');
     Route::get('/filter-data', [UserController::class, 'getFilterData'])->name('filter_data');
+});
+
+Route::middleware('jwt.cookie')->group(function(){
+    Route::resource('/roles', RoleController::class)->except(['show']);
 });

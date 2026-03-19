@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RolesAndPermissionsSeeder extends Seeder
+class RoleAndPermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -42,7 +42,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $superAdminRole->syncPermissions(Permission::all());
 
-        // Assing role to user id 1 (Super Admin)
+        // Assign role to user id 1 (Super Admin)
         $user = User::find(1);
         if ($user) {
             $user->syncRoles(['Super Admin']);
