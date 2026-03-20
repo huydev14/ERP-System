@@ -1,37 +1,44 @@
 @extends('layouts.main')
 
+@section('page-header')
+    <x-page-header title="User Management" description="Manage user" />
+@endsection
+
 @section('content')
-    <table id="users-table" class="display table table-bordered text-nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Họ tên</th>
-                <th>Email</th>
 
-                <th>Bộ phận</th>
-                <th>Vị trí</th>
-                <th>Đội nhóm</th>
+        <table id="users-table" class="display table table-bordered text-nowrap">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
 
-                <th>Loại công việc</th>
-                <th>Trạng thái</th>
-                <th>Ngày bắt đầu</th>
-                <th>Ngày kết thúc</th>
+                    <th>Bộ phận</th>
+                    <th>Vị trí</th>
+                    <th>Đội nhóm</th>
 
-                <th>Giới tính</th>
-                <th>Ngày sinh</th>
-                <th>Số điện thoại</th>
-                <th>Địa chỉ</th>
-                <th>Loại tài khoản</th>
-                <th>Tác vụ</th>
-            </tr>
-        </thead>
-    </table>
+                    <th>Loại công việc</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+
+                    <th>Giới tính</th>
+                    <th>Ngày sinh</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Loại tài khoản</th>
+                    <th>Tác vụ</th>
+                </tr>
+            </thead>
+        </table>
+
+
 
     <script>
         $(function() {
             let table = new DataTable('#users-table', {
                 processing: true,
-                serverSide: true, // Enables server-side processing,
+                serverSide: true,
                 scrollX: true,
                 autoWidth: false,
                 ajax: {

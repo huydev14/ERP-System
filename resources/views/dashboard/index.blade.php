@@ -1,5 +1,9 @@
 @extends('layouts.main')
 
+@section('page-header')
+    <x-page-header title="Home" description="Dashboard & Analysis"/>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-lg-6">

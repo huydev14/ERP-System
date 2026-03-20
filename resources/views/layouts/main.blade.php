@@ -18,12 +18,12 @@
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.css')}}">
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/css/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
     <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Select2 JS -->
-    <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
 
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
@@ -31,46 +31,20 @@
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
 
-        {{-- Head & header --}}
         @include('partials/header')
-
-        {{-- Sidebar --}}
         @include('partials/sidebar')
 
-        <!-- Content Wrapper. Contains page content -->
         <div class="content">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Dashboard</h1>
-                        </div>
+            @yield('page-header')
 
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Dashboard</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.content-header -->
-
-            <!-- Main content -->
-            <div class="container">
-                <div class="container-fluid">
-                    @yield('content')
-                </div>
+            <div class="container-fluid">
+                @yield('content')
             </div>
         </div>
-        <!-- /.content-wrapper -->
 
-        {{-- Footer --}}
         @include('partials/footer')
 
-        <!-- Bootstrap -->
+        {{-- Bootstrap --}}
         <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <!-- AdminLTE -->
         <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
