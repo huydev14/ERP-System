@@ -1,5 +1,4 @@
-<form id="form-create-user" method="POST"
-    class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0">
+<form id="form-create-user" method="POST" class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0">
     @csrf
 
     <div class="tw-flex-1 tw-min-h-0 tw-overflow-y-auto tw-p-6 tw-flex tw-flex-col tw-gap-5">
@@ -109,3 +108,11 @@
         </button>
     </div>
 </form>
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            
+        })
+    </script>
+@endpush
