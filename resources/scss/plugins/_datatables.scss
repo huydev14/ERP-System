@@ -7,7 +7,7 @@
 
     thead th {
         background-color: #faf9f8 !important;
-        color: #323130 !important;
+        color: $text-main !important;
         font-weight: 600;
         font-size: 13px;
         padding: 12px 16px;
@@ -20,7 +20,7 @@
 
     tbody td {
         font-size: 14px;
-        color: #323130;
+        color: $text-main;
         padding: 12px 16px;
         vertical-align: middle;
         border-bottom: 1px solid #edebe9 !important;
@@ -54,7 +54,13 @@
 
 .fluent-toolbar {
     .toolbar-btn-primary {
+        color: #fff;
         padding: 10px 12px;
+        background-color: $blue;
+
+        &:hover {
+            background-color: $blue-hover;
+        }
     }
     #custom-search-input  {
         &:focus,
