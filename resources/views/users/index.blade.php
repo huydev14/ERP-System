@@ -18,29 +18,25 @@
 
                 <button id="toggle-filter-btn" class="tw-text-gray-500 hover:tw-text-[#0f6cbd] tw-px-1 tw-transition-colors"
                     title="Filter">
-                    <i class="fas fa-filter"></i>
+                    <x-icon-filter />
                 </button>
 
                 <div class="tw-h-6 tw-w-px tw-bg-gray-300"></div>
 
                 <div class="tw-flex tw-items-center tw-gap-5 tw-px-2">
                     <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors">
-                        <i class="fas fa-download"></i>
+                        <x-icon-download/>
                     </button>
                     <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors"
-                        onclick="table.ajax.reload()"><i class="fas fa-sync-alt">
-                        </i>
+                        onclick="table.ajax.reload()">
+                        <x-icon-sync/>
                     </button>
                     <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors">
-                        <i class="fas fa-cog"></i>
+                        <x-icon-setting/>
                     </button>
                 </div>
 
-                <button
-                    class="toolbar-btn-primary tw-flex tw-items-center tw-gap-8 tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-font-medium tw-text-sm tw-transition-colors tw-shadow-sm">
-                    <span>Create</span>
-                    <i class="fas fa-plus tw-text-xs"></i>
-                </button>
+                <x-create-button />
             </div>
 
             <div id="filter-panel" class="tw-hidden tw-pt-5 tw-pb-2">
