@@ -23,49 +23,54 @@
 
 @once
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        $(function() {
+            // Open slide-over panel
             window.openSlideover = function(id) {
-                const container = document.getElementById(id);
-                if (!container) return;
-                const panel = container.querySelector('.slideover-panel');
-                const backdrop = container.querySelector('.slideover-backdrop');
+                let container = $(`#${id}`);
+                if (!container.length) return;
 
-                container.classList.remove('tw-hidden');
+                let panel = container.find('.slideover-panel');
+                let backdrop = container.find('.slideover-backdrop');
+
+                container.removeClass('tw-hidden');
+
                 setTimeout(() => {
-                    panel.classList.remove('tw-translate-x-full');
-                    panel.classList.add('tw-translate-x-0');
-                    backdrop.classList.remove('tw-opacity-0');
-                    backdrop.classList.add('tw-opacity-100');
+                    panel.removeClass('tw-translate-x-full').addClass('tw-translate-x-0');
+                    backdrop.removeClass('tw-opacity-0').addClass('tw-opacity-100');
                 }, 10);
             }
 
-            window.closeSlideover = function(container) {
-                const panel = container.querySelector('.slideover-panel');
-                const backdrop = container.querySelector('.slideover-backdrop');
+            // Close slide-over panel
+            window.closeSlideover = function(containerElement) {
+                let container = $(containerElement);
+                let panel = container.find('.slideover-panel');
+                let backdrop = container.find('.slideover-backdrop');
 
-                panel.classList.remove('tw-translate-x-0');
-                panel.classList.add('tw-translate-x-full');
-                backdrop.classList.remove('tw-opacity-100');
-                backdrop.classList.add('tw-opacity-0');
+                panel.removeClass('tw-translate-x-0').addClass('tw-translate-x-full');
+                backdrop.removeClass('tw-opacity-100').addClass('tw-opacity-0');
 
                 setTimeout(() => {
-                    container.classList.add('tw-hidden');
-                }, 300);
+                    container.addClass('tw-hidden');
+                }, 300)
             }
 
-            document.addEventListener('click', function(e) {
-                const openBtn = e.target.closest('[data-slideover-target]');
-                if (openBtn) {
-                    e.preventDefault();
-                    openSlideover(openBtn.getAttribute('data-slideover-target'));
-                }
+            // Open slide-over panel event handler
+            $(document).on('click', '[data-slideover-target]', function(e) {
+                e.preventDefault();
+                
+                let targetId = $(this).data('slideover-target');
+                openSlideover(targetId)
+            })
 
-                if (e.target.closest('.close-slideover')) {
-                    e.preventDefault();
-                    const container = e.target.closest('.slideover-container');
-                    if (container) closeSlideover(container);
+            // Close slide-over panel event handler
+            $(document).on('click', '.close-slideover', function(e) {
+                e.preventDefault();
+
+                let container = $(this).closest('.slideover-container');
+                if (container.length) {
+                    closeSlideover(container)
                 }
-            });
-        });
+            })
+        })
     </script>
 @endonce
