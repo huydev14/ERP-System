@@ -111,7 +111,7 @@ class UserController extends Controller
                 'email.email'    => 'Định dạng email không hợp lệ.',
                 'email.unique'   => 'Email này đã tồn tại trong hệ thống.',
                 'password.required' => 'Vui lòng tạo mật khẩu đăng nhập.',
-                'password.min'   => 'Mật khẩu phải có ít nhất 6 ký tự.',
+                'password.min'    => 'Mật khẩu phải có ít nhất 6 ký tự.',
                 'gender.required' => 'Vui lòng chọn giới tính.',
                 'employment_type.required' => 'Vui lòng chọn hình thức làm việc.',
             ]
