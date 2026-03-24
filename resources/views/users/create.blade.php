@@ -67,6 +67,19 @@
                 </div>
             </div>
 
+            <div class="tw-flex tw-flex-col tw-gap-1">
+                <label class="fluent-label">Đội nhóm</label>
+                <div
+                    class="tw-relative tw-flex tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-border-b-gray-400 tw-rounded-[4px] tw-overflow-hidden hover:tw-border-gray-400 focus-within:tw-border-gray-300 after:tw-content-[''] after:tw-absolute after:tw-bottom-0 after:tw-left-0 after:tw-right-0 after:tw-h-[2px] after:tw-bg-[#0063B1] after:tw-scale-x-0 focus-within:after:tw-scale-x-100 after:tw-transition-transform after:tw-duration-200 after:tw-origin-center">
+                    <select name="team_id"
+                        class="tw-w-full tw-py-1.5 tw-px-2.5 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none tw-outline-none focus:tw-ring-0 tw-appearance-none">
+                        <option value="">Chọn đội nhóm</option>
+                    </select>
+                    <i
+                        class="fas fa-chevron-down tw-absolute tw-right-3 tw-text-gray-500 tw-text-xs tw-pointer-events-none"></i>
+                </div>
+            </div>
+
             <div class="tw-grid tw-grid-cols-2 tw-gap-4"></div>
 
             <div class="tw-grid tw-grid-cols-2 tw-gap-4">
@@ -107,27 +120,42 @@
 @push('scripts')
     <script>
         $(function() {
-            // ----- GET DATA FOR SELECT ----------------------
-            $.ajax({
-                method: 'GET',
-                url: '{{ route('users.filter_data') }}',
-                success: function(res) {
-                    let departmentSelect = $('#form-create-user select[name="department_id"]');
-                    let html = '';
+            // ----- GET DATA FOR SELECT FIELDs ----------------------
+            let departmentSelect = $('#form-create-user select[name="department_id"]');
+            let teamSelect = $('#form-create-user select[name="team_id"]');
 
-                    // Reset option selected
-                    departmentSelect.find('option:not([value=""])').remove();
+            $.getJSON('{{ route('users.filter_data') }}')
+                .done(function(res) {
+                    renderOptions(departmentSelect, res.department_data);
+                })
+                .fail(function(xhr) {
+                    console.error('Load error:', xhr.status)
+                    console.error('Load error:', xhr.responseText)
+                })
 
-                    // Apply data to options
-                    $.each(res.department_data, function(i, item) {
-                        html += `<option value="${item.id}">${item.text}</option>`;
+            // Team data change on department id selected
+            departmentSelect.on('change', function() {
+                let departmentId = $(this).val();
+
+                $.getJSON('{{ route('users.filter_data') }}', {
+                        department_id: departmentId
+                    })
+                    .done(function(res) {
+                        renderOptions(teamSelect, res.team_data)
                     });
-                    departmentSelect.append(html);
-                },
-                error: function(xhr) {
-                    console.error('Không có dữ liệu phòng ban')
-                }
             })
+
+            // Render <option> helper
+            function renderOptions(selector, data) {
+                selector.find('option:not([value=""])').remove();
+                selector.val('');
+
+                let html = ""
+                data.forEach(item => {
+                    html += `<option value="${item.id}">${item.text}</option>`;
+                });
+                selector.append(html);
+            }
 
             // ----- CREATE NEW USER --------------------------
             $('#form-create-user').on('submit', function(e) {

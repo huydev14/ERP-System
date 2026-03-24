@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Department;
+use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -70,7 +71,7 @@ class UserController extends Controller
         }
     }
 
-    public function getFilterData()
+    public function getFilterData(Request $request)
     {
         $status_data = collect([
             ['id'  => 1, 'text' => 'Đã nghỉ'],
@@ -80,12 +81,24 @@ class UserController extends Controller
             ['id' => 0, 'text' => 'Full-time'],
             ['id' => 1, 'text' => 'Part-time'],
         ]);
-        $department_data   = Department::select('id', 'name as text')->orderBy('name')->get();
+        $department_data = Department::select('id', 'name as text')->orderBy('name')->get();
+
+        $team_data = Team::select('id', 'name as text')
+            ->when($request->filled('department_id'), function ($q) use ($request) {
+                $q->where('department_id', $request->department_id);
+            }, function ($q) {
+                $q->whereRaw('1 = 0');
+            })
+            ->orderBy('id')
+            ->get();
+
+
         $role_data = Role::select('id', 'name as text')->orderBy('id')->get();
 
         return response()->json([
             'status_data' => $status_data,
             'department_data' => $department_data,
+            'team_data' => $team_data,
             'employment_type_data' => $employment_type_data,
             'role_data' => $role_data,
         ]);
@@ -103,6 +116,7 @@ class UserController extends Controller
                 'address'  => 'nullable|string|max:255',
                 'gender'   => 'required|in:0,1',
                 'department_id' => 'required|exists:departments,id',
+                'team_id' => 'nullable|exists:teams,id',
                 'start_date' => 'nullable|date',
                 'employment_type' => 'required|in:0,1',
             ],
@@ -116,6 +130,7 @@ class UserController extends Controller
                 'gender.required' => 'Vui lòng chọn giới tính.',
                 'department_id.required' => 'Vui lòng chọn phòng ban.',
                 'department_id.exists' => 'Phòng ban không hợp lệ.',
+                'team_id.exists' => 'Đội nhóm không hợp lệ.',
                 'employment_type.required' => 'Vui lòng chọn hình thức làm việc.',
             ]
         );
@@ -131,9 +146,14 @@ class UserController extends Controller
                 'message' => 'Thêm nhân viên thành công.',
             ], 200);
         } catch (Exception $e) {
+            Log::error('Create user failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return response()->json([
                 'status' => 'error',
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage(),
+                'message' => 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại!',
             ], 500);
         }
     }
