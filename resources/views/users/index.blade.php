@@ -183,6 +183,7 @@
                     renderOptions('#f_role', res.role_data);
                     renderOptions('#create-department', res.department_data);
                     renderOptions('#create-team', res.team_data);
+                    renderOptions('#create-user-role', res.role_data);
 
                     $('#create-department').on('change', function() {
                         let departmentId = $(this).val();

@@ -53,48 +53,9 @@
             <h3 class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wider">
                 Thông tin công việc
             </h3>
-
-            {{-- Select: department --}}
-            <div class="tw-flex tw-flex-col tw-gap-1">
-                <label class="fluent-label" for="create-department">Phòng ban</label>
-                <div
-                    class="tw-relative tw-flex tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-border-b-gray-400 tw-rounded-[4px] tw-overflow-hidden hover:tw-border-gray-400 focus-within:tw-border-gray-300 after:tw-content-[''] after:tw-absolute after:tw-bottom-0 after:tw-left-0 after:tw-right-0 after:tw-h-[2px] after:tw-bg-[#0063B1] after:tw-scale-x-0 focus-within:after:tw-scale-x-100 after:tw-transition-transform after:tw-duration-200 after:tw-origin-center">
-                    <select name="department_id" id="create-department"
-                        class="tw-w-full tw-py-1.5 tw-px-2.5 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none tw-outline-none focus:tw-ring-0 tw-appearance-none">
-                        <option value="">Chọn phòng ban</option>
-                    </select>
-                    <i
-                        class="fas fa-chevron-down tw-absolute tw-right-3 tw-text-gray-500 tw-text-xs tw-pointer-events-none"></i>
-                </div>
-            </div>
-
-            {{-- Select: team --}}
-            <div class="tw-flex tw-flex-col tw-gap-1">
-                <label class="fluent-label" for="create-team">Đội nhóm</label>
-                <div
-                    class="tw-relative tw-flex tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-border-b-gray-400 tw-rounded-[4px] tw-overflow-hidden hover:tw-border-gray-400 focus-within:tw-border-gray-300 after:tw-content-[''] after:tw-absolute after:tw-bottom-0 after:tw-left-0 after:tw-right-0 after:tw-h-[2px] after:tw-bg-[#0063B1] after:tw-scale-x-0 focus-within:after:tw-scale-x-100 after:tw-transition-transform after:tw-duration-200 after:tw-origin-center">
-                    <select name="team_id" id="create-team"
-                        class="tw-w-full tw-py-1.5 tw-px-2.5 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none tw-outline-none focus:tw-ring-0 tw-appearance-none">
-                        <option value="">Chọn đội nhóm</option>
-                    </select>
-                    <i
-                        class="fas fa-chevron-down tw-absolute tw-right-3 tw-text-gray-500 tw-text-xs tw-pointer-events-none"></i>
-                </div>
-            </div>
-
-            {{-- Select: role --}}
-            {{-- <div class="tw-flex tw-flex-col tw-gap-1">
-                <label class="fluent-label" for="create-team">Loại tài khoản</label>
-                <div
-                    class="tw-relative tw-flex tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-border-b-gray-400 tw-rounded-[4px] tw-overflow-hidden hover:tw-border-gray-400 focus-within:tw-border-gray-300 after:tw-content-[''] after:tw-absolute after:tw-bottom-0 after:tw-left-0 after:tw-right-0 after:tw-h-[2px] after:tw-bg-[#0063B1] after:tw-scale-x-0 focus-within:after:tw-scale-x-100 after:tw-transition-transform after:tw-duration-200 after:tw-origin-center">
-                    <select name="team_id" id="create-team"
-                        class="tw-w-full tw-py-1.5 tw-px-2.5 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none tw-outline-none focus:tw-ring-0 tw-appearance-none">
-                        <option value="">Chọn loại tài khoản</option>
-                    </select>
-                    <i
-                        class="fas fa-chevron-down tw-absolute tw-right-3 tw-text-gray-500 tw-text-xs tw-pointer-events-none"></i>
-                </div>
-            </div> --}}
+            <x-select title="Phòng ban" id="create-department" name="department_id" />
+            <x-select title="Đội nhóm" id="create-team" name="team_id" />
+            <x-select title="Loại tài khoản" id="create-user-role" name="role_id" />
 
             <div class="tw-grid tw-grid-cols-2 tw-gap-4"></div>
 
