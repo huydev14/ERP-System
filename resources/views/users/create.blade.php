@@ -112,12 +112,10 @@
 
                 // Remove old error feedback
                 form.find('.field-error').remove();
-                // Remove red border of error feedback
                 form.find('.tw-border-red-500')
                     .removeClass('tw-border-red-500')
                     .addClass('tw-border-gray-300');
 
-                // Send ajax request
                 $.ajax({
                     type: 'POST',
                     url: url,
@@ -127,7 +125,7 @@
                     success: function(res) {
                         submitBtn.prop('disabled', false).html(originalBtnText);
 
-                        if (res.status === 'success') {
+                        if (res.success) {
                             form[0].reset();
 
                             // Close slide-over

@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -152,8 +153,8 @@ class UserController extends Controller
             }
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Thêm nhân viên thành công',
+                'success' => true,
+                'msg' => 'Thêm nhân viên thành công',
             ], 200);
         } catch (Exception $e) {
             Log::error('Create user failed', [
@@ -163,7 +164,68 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Lỗi hệ thống',
+                'msg' => 'Lỗi hệ thống',
+            ], 500);
+        }
+    }
+
+    public function edit($id)
+    {
+        $user = User::with('role')->findOrFail($id);
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $request->validate(
+            [
+                'name'     => 'required|string|max:255',
+                'email'    => ['required', 'email', Rule::unique('users')->ignore($id)],
+                'phone'    => 'nullable|string|max:20',
+                'birthday' => 'nullable|date',
+                'address'  => 'nullable|string|max:255',
+                'gender'   => 'required|in:0,1',
+                'department_id' => 'required|exists:departments,id',
+                'team_id' => 'nullable|exists:teams,id',
+                'role_id' => 'nullable|exists:roles,id',
+                'start_date' => 'nullable|date',
+                'employment_type' => 'required|in:0,1',
+            ],
+            [
+                'name.required'  => 'Vui lòng nhập họ và tên.',
+                'email.required' => 'Vui lòng nhập địa chỉ email.',
+                'email.email'    => 'Định dạng email không hợp lệ.',
+                'email.unique'   => 'Email này đã tồn tại trong hệ thống.',
+                'gender.required' => 'Vui lòng chọn giới tính.',
+                'department_id.required' => 'Vui lòng chọn phòng ban.',
+                'department_id.exists' => 'Phòng ban không hợp lệ.',
+                'team_id.exists' => 'Đội nhóm không hợp lệ.',
+                'role_id.exists' => 'Loại tài khoản không hợp lệ.',
+                'employment_type.required' => 'Vui lòng chọn hình thức làm việc.',
+            ]
+        );
+
+        try {
+            $data = $request->except('password');
+
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
+            }
+            $user->update($data);
+
+            return response()->json([
+                'success' => true,
+                'msg' => 'Cập nhật thành công'
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('Update user failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json([
+                'success' => false,
+                'msg' => 'Lỗi hệ thống'
             ], 500);
         }
     }
@@ -176,7 +238,7 @@ class UserController extends Controller
             // Prevent delete myself
             if (Auth::id() === $user->id) {
                 return response()->json([
-                    'message' => 'Không thể tự xóa tài khoản của chính mình!'
+                    'msg' => 'Không thể tự xóa tài khoản của chính mình!'
                 ], 403);
             }
 
@@ -184,11 +246,11 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đã xóa nhân viên'
+                'msg' => 'Đã xóa nhân viên'
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Đã xảy ra lỗi!'
+                'msg' => 'Đã xảy ra lỗi!'
             ], 500);
         }
     }
@@ -201,12 +263,12 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đã khôi phục nhân viên thành công'
+                'msg' => 'Đã khôi phục nhân viên thành công'
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Lỗi hệ thống, không thể khôi phục!'
+                'msg' => 'Lỗi hệ thống, không thể khôi phục!'
             ], 500);
         }
     }
