@@ -5,25 +5,24 @@
             Thông tin cá nhân
         </h3>
         {{-- Name --}}
-        <x-input value="{{ $user->name }}" id="name" name="name" label="Họ và tên" icon="far fa-user"
+        <x-input :value="$user->name" id="name" name="name" label="Họ và tên" icon="far fa-user"
             placeholder="Nhập họ và tên" required />
         {{-- Email --}}
-        <x-input value="{{ $user->email }}" type="email" id="email" name="email" label="Email"
+        <x-input :value="$user->email" type="email" id="email" name="email" label="Email"
             icon="far fa-envelope" placeholder="email@congty.com" required />
         {{-- Password --}}
-        <x-input type="password" id="password" name="password" label="Mật khẩu" icon="fas fa-lock"
-            placeholder="{{ $user->id ? 'Bỏ trống nếu không đổi' : 'Tạo mật khẩu đăng nhập' }}"
-            {{ $user->id ? '' : 'required' }} />
+        <x-input type="password" id="password" name="password" label="Mật khẩu" icon="fas fa-lock" :placeholder="$user->id ? 'Bỏ trống nếu không đổi' : 'Tạo mật khẩu đăng nhập'"
+            :required="!$user->id" />
 
         <div class="tw-grid tw-grid-cols-2 tw-gap-4">
             {{-- Phone number --}}
-            <x-input value="{{ $user->phone }}" type="tel" id="phone" name="phone" label="Số điện thoại"
+            <x-input :value="$user->phone" type="tel" id="phone" name="phone" label="Số điện thoại"
                 icon="fas fa-phone-alt" placeholder="09xx..." />
             {{-- Birthday --}}
-            <x-input value="{{ $user->birthday }}" type="date" id="birthday" name="birthday" label="Ngày sinh" />
+            <x-input :value="$user->birthday" type="date" id="birthday" name="birthday" label="Ngày sinh" />
         </div>
 
-        <x-input value="{{ $user->address }}" id="address" name="address" label="Địa chỉ" icon="fas fa-map-marker-alt"
+        <x-input :value="$user->address" id="address" name="address" label="Địa chỉ" icon="fas fa-map-marker-alt"
             placeholder="Nhập địa chỉ hiện tại" />
 
         <div class="tw-flex tw-flex-col tw-gap-1">
@@ -61,7 +60,7 @@
         <div class="tw-grid tw-grid-cols-2 tw-gap-4"></div>
 
         <div class="tw-grid tw-grid-cols-2 tw-gap-4">
-            <x-input value="{{ $user->start_date }}" type="date" id="start_date" name="start_date"
+            <x-input :value="$user->start_date" type="date" id="start_date" name="start_date"
                 label="Ngày bắt đầu" />
 
             <div class="tw-flex tw-flex-col tw-gap-1">
