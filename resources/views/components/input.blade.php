@@ -1,13 +1,12 @@
 {{-- Component: Input field --}}
 @props([
     'id' => '',
-    'name' => '',
     'label' => '',
     'icon' => null,
-    'helper' => null,
-    'type' => 'text',
     'placeholder' => '',
     'required' => '',
+
+    'helper' => null,
 ])
 
 <div class="tw-flex tw-flex-col tw-gap-1">
@@ -23,7 +22,7 @@
             </div>
         @endif
 
-        <input type="{{ $type }}" id="{{ $id }}" name="{{ $name }}"
+        <input id="{{ $id }}"
             placeholder="{{ $placeholder }}"
             {{ $attributes->merge(['class' => 'tw-w-full tw-py-1.5 tw-px-2.5 tw-text-sm tw-text-gray-900 tw-bg-transparent tw-border-none tw-outline-none focus:tw-ring-0 placeholder:tw-text-gray-400']) }} />
     </div>
