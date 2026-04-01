@@ -44,9 +44,7 @@
                         <th>Trạng thái</th>
                         <th>Số điện thoại</th>
                         <th>Loại tài khoản</th>
-                        <th>
-                            <div class="tw-text-center">Tác vụ</div>
-                        </th>
+                        <th>Tác vụ</th>
                     </tr>
                 </thead>
             </table>
@@ -266,7 +264,6 @@
                 }
             })
 
-
             $(document).on('click', '.edit-user-btn, #edit-user-btn', function() {
                 let editUrl = $(this).data('edit-url');
                 openSlideover('slideover-edit-user');
@@ -276,7 +273,9 @@
                     $('#content-edit').html(html);
 
                 }).fail(function(xhr) {
-                    $('#content-edit').html('<div class="tw-text-red-500 tw-text-center tw-mt-10">Lỗi tải dữ liệu. Vui lòng thử lại.</div>');
+                    $('#content-edit').html(
+                        '<div class="tw-text-red-500 tw-text-center tw-mt-10">Lỗi tải dữ liệu. Vui lòng thử lại.</div>'
+                        );
                     console.error('Load edit form error:', xhr.status);
                     console.error('Load edit form error:', xhr.responseText);
                 });
@@ -356,7 +355,6 @@
                                         </span>`);
                                 }
                             });
-
                             fluentToast({
                                 type: 'error',
                                 title: isCreate ? 'Thêm nhân viên thất bại' :
