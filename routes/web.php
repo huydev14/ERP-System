@@ -6,7 +6,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
-// Lang switch
+require __DIR__ . '/auth.php';
+
+// ----  Lang switch -----------------------------------
 Route::get('lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'vi'])) {
         Session::put('locale', $locale);
@@ -14,32 +16,27 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
-
-Route::get('/', function () {
-    return view('dashboard.index');
-})->middleware('jwt.cookie')->name('dashboard');
-
 Route::middleware('jwt.cookie')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    // ---- Dashboard -----------------------------------
+    Route::get('/', function () {
+        return view('dashboard.index');
+    })->middleware('jwt.cookie')->name('dashboard');
 
-require __DIR__ . '/auth.php';
+    // ---- Users ---------------------------------------
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/data', [UserController::class, 'data'])->name('data');
+        Route::get('/filter-data', [UserController::class, 'getFilterData'])->name('filter_data');
+        Route::post('/{id}/restore', [UserController::class, 'restore'])->name('restore');
+    });
+    Route::resource('users', UserController::class);
 
-// --- USER ROUTES ---------------------------
-Route::middleware('jwt.cookie')->prefix('users')->name('users.')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('index');
-    Route::get('/data', [UserController::class, 'data'])->name('data');
-    Route::get('/filter-data', [UserController::class, 'getFilterData'])->name('filter_data');
-    Route::get('/create', [UserController::class, 'create'])->name('create');
-    Route::post('/create', [UserController::class, 'store'])->name('store');
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
-    Route::post('/{id}/restore', [UserController::class, 'restore'])->name('restore');
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [UserController::class, 'update'])->name('update');
-});
+    // ---- Profile ---------------------------------------
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    });
 
-Route::middleware('jwt.cookie')->group(function () {
+    // ---- Role ---------------------------------------
     Route::resource('/roles', RoleController::class)->except(['show']);
 });
