@@ -115,7 +115,6 @@
                 {{-- Right panel --}}
                 <div class="lg:tw-col-span-8">
                     <div class="fluent-card tw-h-full">
-
                         {{-- Tab Navigation --}}
                         <div class="tw-border-b tw-border-gray-200 tw-px-6">
                             <nav class="tw--mb-px tw-flex tw-space-x-8" aria-label="Tabs">
@@ -128,225 +127,33 @@
                                     data-target="#tab-work">
                                     Công tác
                                 </button>
-
+                                <button
+                                    class="fluent-tab tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300 tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
+                                    data-target="#tab-timeline">
+                                    Lộ trình
+                                </button>
                                 <button
                                     class="fluent-tab tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300 tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
                                     data-target="#tab-activity">
                                     Activity Logs
+                                </button>
+                                <button
+                                    class="fluent-tab tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300 tw-whitespace-nowrap tw-py-4 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
+                                    data-target="#tab-documents">
+                                    Tài liệu & Hợp đồng
                                 </button>
                             </nav>
                         </div>
 
                         {{-- Tab Contents --}}
                         <div class="tw-p-6">
-                            {{-- TAB Overview --}}
-                            <div id="tab-overview" class="tab-pane">
-                                <h3
-                                    class="tw-text-sm tw-font-semibold tw-text-[#0063B1] tw-mb-4 tw-uppercase tw-tracking-wide">
-                                    Thông tin cá nhân</h3>
-                                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 tw-mb-8">
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Họ và tên</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">{{ $user->name }}</div>
-                                    </div>
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Giới tính</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">
-                                            {{ $user->gender == 0 ? 'Nam' : ($user->gender == 1 ? 'Nữ' : '—') }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Ngày sinh</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">
-                                            {{ $user->birthday ? \Carbon\Carbon::parse($user->birthday)->format('d/m/Y') : '—' }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Địa chỉ thường
-                                            trú</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">{{ $user->address ?? '—' }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <h3
-                                    class="tw-text-sm tw-font-semibold tw-text-[#0063B1] tw-mb-4 tw-uppercase tw-tracking-wide">
-                                    Thông tin công việc</h3>
-                                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6">
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Phòng ban</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">
-                                            {{ $user->department->name ?? '—' }}</div>
-                                    </div>
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Đội / Nhóm</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">
-                                            {{ $user->team->name ?? '—' }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Chức vụ</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">
-                                            {{ $user->position->name ?? '—' }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Hình thức làm
-                                            việc</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">
-                                            {{ $user->employment_type == 0 ? 'Toàn thời gian (Full-time)' : 'Bán thời gian (Part-time)' }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Ngày gia nhập</label>
-                                        <div class="tw-text-sm tw-text-gray-900 tw-font-medium">
-                                            {{ $user->start_date ? \Carbon\Carbon::parse($user->start_date)->format('d/m/Y') : '—' }}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label class="tw-block tw-text-xs tw-text-gray-500 tw-mb-1">Ngày nghỉ việc</label>
-                                        @if ($user->status === 1)
-                                            <div class="tw-text-sm tw-text-red-600 tw-font-medium">
-                                                {{ $user->start_date ? \Carbon\Carbon::parse($user->start_date)->format('d/m/Y') : '—' }}
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            {{-- TAB Work --}}
-                            <div id="tab-work" class="tab-pane tw-hidden">
-                                <h3 class="tw-text-base tw-font-semibold tw-text-gray-900 tw-mb-5">Chi tiết tổ chức</h3>
-
-                                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
-                                </div>
-
-                                <div class="tw-mt-10">
-                                    <h3 class="tw-text-base tw-font-semibold tw-text-gray-900 tw-mb-4">
-                                        Quỹ nghỉ phép <span class="tw-text-sm tw-font-normal tw-text-gray-500 tw-ml-1">(Năm
-                                            {{ date('Y') }})</span>
-                                    </h3>
-
-                                    <div class="tw-grid tw-grid-cols-3 tw-gap-5">
-                                        <div
-                                            class="tw-bg-white tw-border tw-border-gray-200 tw-p-5 tw-shadow-sm hover:tw-shadow-md tw-transition-shadow">
-                                            <div class="tw-flex tw-items-center tw-gap-4">
-                                                <div
-                                                    class="tw-w-10 tw-h-10 tw-rounded-full tw-bg-gray-100 tw-flex tw-items-center tw-justify-center tw-text-gray-600">
-                                                    <i class="far fa-calendar-alt tw-text-lg"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="tw-text-2xl tw-font-semibold tw-text-gray-900">12</div>
-                                                    <div class="tw-text-xs tw-text-gray-500 tw-mt-0.5">Tổng ngày phép</div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="tw-bg-white tw-border tw-border-gray-200 tw-p-5 tw-shadow-sm hover:tw-shadow-md tw-transition-shadow">
-                                            <div class="tw-flex tw-items-center tw-gap-4">
-                                                <div
-                                                    class="tw-w-10 tw-h-10 tw-rounded-full tw-bg-blue-50 tw-flex tw-items-center tw-justify-center tw-text-[#0063B1]">
-                                                    <i class="far fa-calendar-check tw-text-lg"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="tw-text-2xl tw-font-semibold tw-text-[#0063B1]">4.5</div>
-                                                    <div class="tw-text-xs tw-text-gray-500 tw-mt-0.5">Đã sử dụng</div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="tw-bg-white tw-border tw-border-gray-200 tw-p-5 tw-shadow-sm hover:tw-shadow-md tw-transition-shadow">
-                                            <div class="tw-flex tw-items-center tw-gap-4">
-                                                <div
-                                                    class="tw-w-10 tw-h-10 tw-rounded-full tw-bg-green-50 tw-flex tw-items-center tw-justify-center tw-text-green-600">
-                                                    <i class="far fa-calendar-plus tw-text-lg"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="tw-text-2xl tw-font-semibold tw-text-green-600">7.5</div>
-                                                    <div class="tw-text-xs tw-text-gray-500 tw-mt-0.5">Còn lại</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tw-mt-10">
-                                    <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
-                                        <h3 class="tw-text-base tw-font-semibold tw-text-gray-900">Thiết bị đã cấp phát
-                                        </h3>
-                                    </div>
-
-                                    <div class="tw-bg-white tw-border tw-border-gray-200 tw-shadow-sm tw-overflow-hidden">
-                                        <table class="tw-w-full tw-text-sm tw-text-left">
-                                            <thead class="tw-bg-white tw-border-b tw-border-gray-200">
-                                                <tr>
-                                                    <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Thiết
-                                                        bị</th>
-                                                    <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Mã tài
-                                                        sản</th>
-                                                    <th class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500">Ngày
-                                                        nhận</th>
-                                                    <th
-                                                        class="tw-px-5 tw-py-3.5 tw-font-semibold tw-text-gray-500 tw-text-right">
-                                                        Trạng thái</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="tw-divide-y tw-divide-gray-100">
-
-                                                {{-- Row 1: Laptop --}}
-                                                <tr class="hover:tw-bg-gray-50 tw-transition-colors">
-                                                    <td class="tw-px-5 tw-py-4 tw-flex tw-items-center tw-gap-3">
-                                                        <div
-                                                            class="tw-w-9 tw-h-9 tw-rounded-md tw-bg-gray-50 tw-border tw-border-gray-100 tw-flex tw-items-center tw-justify-center tw-text-gray-500">
-                                                            <i class="fas fa-laptop"></i>
-                                                        </div>
-                                                        <div class="tw-font-medium tw-text-gray-900">MacBook Pro M2 14"
-                                                        </div>
-                                                    </td>
-                                                    <td class="tw-px-5 tw-py-4 tw-text-gray-600">IT-MBP-2024-045</td>
-                                                    <td class="tw-px-5 tw-py-4 tw-text-gray-600">15/01/2026</td>
-                                                    <td class="tw-px-5 tw-py-4 tw-text-right">
-                                                        <span
-                                                            class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-1 tw-rounded-md tw-text-xs tw-font-medium tw-bg-green-50 tw-text-green-700 tw-border tw-border-green-200">
-                                                            Đang sử dụng
-                                                        </span>
-                                                    </td>
-                                                </tr>
-
-                                                {{-- Row 2: Màn hình --}}
-                                                <tr class="hover:tw-bg-gray-50 tw-transition-colors">
-                                                    <td class="tw-px-5 tw-py-4 tw-flex tw-items-center tw-gap-3">
-                                                        <div
-                                                            class="tw-w-9 tw-h-9 tw-rounded-md tw-bg-gray-50 tw-border tw-border-gray-100 tw-flex tw-items-center tw-justify-center tw-text-gray-500">
-                                                            <i class="fas fa-desktop"></i>
-                                                        </div>
-                                                        <div class="tw-font-medium tw-text-gray-900">Màn hình Dell
-                                                            UltraSharp 27"</div>
-                                                    </td>
-                                                    <td class="tw-px-5 tw-py-4 tw-text-gray-600">IT-MON-2024-112</td>
-                                                    <td class="tw-px-5 tw-py-4 tw-text-gray-600">15/01/2026</td>
-                                                    <td class="tw-px-5 tw-py-4 tw-text-right">
-                                                        <span
-                                                            class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-1 tw-rounded-md tw-text-xs tw-font-medium tw-bg-green-50 tw-text-green-700 tw-border tw-border-green-200">
-                                                            Đang sử dụng
-                                                        </span>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- TAB Activity --}}
+                            @include('users.tabs.overview')
+                            @include('users.tabs.work')
+                            @include('users.tabs.timeline')
                             <div id="tab-activity" class="tab-pane tw-hidden">
                                 {{-- TODO: Add user audit logs --}}
                             </div>
+                            @include('users.tabs.document')
                         </div>
                     </div>
                 </div>
