@@ -30,7 +30,7 @@ class UserController extends Controller
         $user = User::with(['roles', 'department', 'position', 'team'])->findOrFail($id);
         $activities = $user->activities()->latest()->get();
 
-        AuditLogService::log('Xem profile người dùng', 'users.show', Auth::user(), $user);
+        AuditLogService::log('Xem profile người dùng', $user, 'user created')
 
         return view('users.show', compact('user', 'activities'));
     }

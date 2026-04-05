@@ -2,25 +2,15 @@
 
 namespace App\Services;
 
+use App\Events\AuditLogEvent;
 use Illuminate\Database\Eloquent\Model;
 
 class AuditLogService
 {
-    public static function log(
-        string $description,
-        string $log_name = 'system',
-        ?Model $caused_by = null,
-        ?Model $performedOn = null
-    ) {
-        $activity = activity($log_name);
+    public static function log($description, $model, $logName = 'audit') {
 
-        if ($caused_by) {
-            $activity->causedBy($caused_by);
-        }
-        if ($performedOn) {
-            $activity->performedOn($performedOn);
-        }
-
+        $causer = auth()->user();
+        
         $properties = [
             'ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
@@ -30,6 +20,6 @@ class AuditLogService
             'session_id' => session()->getId(),
         ];
 
-        return $activity->withProperties($properties)->log($description);
+        AuditLogEvent::dispatch($description, $model,  $logName, $properties, $causer)
     }
 }
