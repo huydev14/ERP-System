@@ -126,7 +126,10 @@
                 createdRow: function(row, data) {
                     let url = '{{ route('users.show', ':id') }}'.replace(':id', data.id);
 
-                    $(row).css('cursor', 'pointer').on('click', function() {
+                    $(row).css('cursor', 'pointer').on('click', function(e) {
+                        if($(e.target).closest('button').length > 0){
+                            return;
+                        }
                         window.location.href = url;
                     })
                 },

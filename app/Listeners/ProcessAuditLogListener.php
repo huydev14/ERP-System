@@ -22,13 +22,13 @@ class ProcessAuditLogListener implements ShouldQueue
      */
     public function handle(AuditLogEvent $event): void
     {
-        $activity = activity($event->log_name);
+        $activity = activity($event->logName);
 
-        if ($event->caused_by) {
-            $activity->causedBy($event->caused_by);
+        if ($event->causer) {
+            $activity->causedBy($event->causer);
         }
-        if ($event->performedOn) {
-            $activity->performedOn($event->performedOn);
+        if ($event->model) {
+            $activity->performedOn($event->model);
         }
 
         $activity->withProperties($event->properties)

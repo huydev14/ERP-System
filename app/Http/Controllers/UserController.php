@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use App\Models\Department;
-use App\Models\Team;
-use App\Services\AuditLogService;
-use Exception;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
+use Exception;
+
+use App\Models\User;
+use App\Models\Department;
+use App\Models\Team;
 use Spatie\Permission\Models\Role;
+
+use Yajra\DataTables\DataTables;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Services\AuditLogService;
 
 class UserController extends Controller
 {
     public function index()
     {
-        AuditLogService::log('Xem danh sách tài khoản', 'users.index', Auth::user());
         return view('users.index');
     }
 
@@ -29,8 +30,6 @@ class UserController extends Controller
     {
         $user = User::with(['roles', 'department', 'position', 'team'])->findOrFail($id);
         $activities = $user->activities()->latest()->get();
-
-        AuditLogService::log('Xem profile người dùng', $user, 'user created')
 
         return view('users.show', compact('user', 'activities'));
     }
@@ -59,8 +58,6 @@ class UserController extends Controller
                 $user->assignRole($role);
             }
 
-            AuditLogService::log('Đã tạo người dùng mới thành công', 'users.create', Auth::user(), $user);
-
             return response()->json(['success' => true, 'msg' => 'Thêm nhân viên thành công'], 200);
         } catch (Exception $e) {
             Log::error('Create user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
@@ -87,12 +84,7 @@ class UserController extends Controller
             }
             $user->update($data);
 
-            AuditLogService::log('Cập nhật người dùng thành công', 'users.update', Auth::user(), $user);
-
-            return response()->json([
-                'success' => true,
-                'msg' => 'Cập nhật thành công'
-            ], 200);
+            return response()->json(['success' => true, 'msg' => 'Cập nhật thành công'], 200);
         } catch (Exception $e) {
             Log::error('Update user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString(),]);
             return response()->json(['success' => false, 'msg' => 'Lỗi hệ thống'], 500);
@@ -109,7 +101,6 @@ class UserController extends Controller
             }
             $user->delete();
 
-            AuditLogService::log('Xóa người dùng thành công', 'user', Auth::user(), $user);
             return response()->json(['success' => true, 'msg' => 'Đã xóa nhân viên']);
         } catch (Exception $e) {
             Log::error('Remove user failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString(),]);
@@ -122,8 +113,6 @@ class UserController extends Controller
         try {
             $user = User::withTrashed()->findOrFail($id);
             $user->restore();
-
-            AuditLogService::log('Đã khôi phục người dùng thành công', 'users.restore', Auth::user(), $user);
 
             return response()->json(['success' => true, 'msg' => 'Đã khôi phục nhân viên thành công']);
         } catch (Exception $e) {
@@ -207,7 +196,6 @@ class UserController extends Controller
             })
             ->orderBy('id')
             ->get();
-
 
         $role_data = Role::select('id', 'name as text')->orderBy('id')->get();
 
