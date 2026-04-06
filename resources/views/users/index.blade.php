@@ -12,8 +12,7 @@
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-5">
                     <h4 class="tw-text-base tw-font-bold tw-text-gray-800">Filter</h4>
                     <div class="tw-flex tw-items-center tw-gap-4">
-                        <button id="btn-clear-filters"
-                            class="tw-text-sm tw-text-blue-600 hover:tw-text-blue-800 tw-font-medium">
+                        <button id="btn-clear-filters" class="tw-text-sm tw-font-medium">
                             Clear all
                         </button>
                         <button id="close-filter-btn" class="tw-text-gray-400 hover:tw-text-gray-700 tw-transition-colors">
@@ -186,6 +185,12 @@
 
             $(document).on('change', '#filter-panel select', function() {
                 usersTable.ajax.reload();
+            });
+
+            $('#f_status, #f_department, #f_employment_type, #f_role').select2({
+                theme: 'bootstrap4',
+                minimumResultsForSearch: 10,
+                width: '100%',
             });
 
             // Clear filter

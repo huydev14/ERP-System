@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
+use App\Models\User;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\DataTables\DataTables;
 
@@ -49,5 +51,42 @@ class AuditLogController extends Controller
                 ->rawColumns(['description', 'subject_id', 'ip_address', 'details'])
                 ->make(true);
         }
+    }
+
+    public function getFilterData()
+    {
+        // Get log names
+        $logNames = Activity::select('log_name')
+            ->whereNotNull('log_name')
+            ->where('log_name', '!=', '')
+            ->distinct()
+            ->pluck('log_name');
+
+        $logNameData = $logNames->map(function ($name) {
+            return [
+                'id' => $name,
+                'text' => $name
+            ];
+        })->values();
+
+        // Get causers
+        $causerIds = Activity::whereNotNull('causer_id')->distinct()->pluck('causer_id');
+
+        $causerData = User::whereIn('id', $causerIds)
+            ->select('id', 'name')
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'text' => $user->name
+                ];
+            })->values();
+
+
+
+        return response()->json([
+            'logNameData' => $logNameData,
+            'causerData'  => $causerData,
+        ]);
     }
 }

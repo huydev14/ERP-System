@@ -1,6 +1,7 @@
+@use '../base/variables' as *;
 #filter-panel {
     .select2-container--bootstrap4 .select2-selection {
-        background-color: #f3f4f6 !important;
+        background-color: $sub-surface-color !important;
         border: none !important;
         border-bottom: 1px solid #9ca3af !important;
         border-radius: 2px 2px 0 0 !important;
@@ -21,7 +22,6 @@
         border-bottom: 2px solid #0f6cbd !important;
         box-shadow: none !important;
     }
-
 
     .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
         line-height: 40px !important;

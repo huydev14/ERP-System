@@ -1,15 +1,15 @@
 @use '../base/variables' as *;
 
 #btn-clear-filters {
-    background: #eef4fb;
-    color: #1b5e9c;
-    border: 1px solid #c8dbf2;
+    background: $sub-surface-color !important;
+    color: $text-main !important;
+    border: 1px solid $neutral-border;
     border-radius: 4px;
     padding: 0 10px;
     height: 34px;
 
     &:hover {
-        background: #e2edf9;
+        background: $hover-bg !important;
     }
     &:active {
     transform: scale(0.98);

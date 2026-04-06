@@ -20,12 +20,6 @@ function renderOptions(selector, items) {
     $selector.append(html);
 }
 
-$('#f_status, #f_department, #f_employment_type, #f_role').select2({
-    theme: 'bootstrap4',
-    minimumResultsForSearch: 10,
-    width: '100%',
-});
-
 window.ajaxFormRequest = function (formSelector, dataTableInstance = null, reloadPage = false) {
     $(document).on('submit', formSelector, function (e) {
         e.preventDefault();

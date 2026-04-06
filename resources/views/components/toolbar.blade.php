@@ -24,9 +24,13 @@
         <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors">
             <x-icon-download />
         </button>
-        <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors" :onclick="$dataTableInstance.ajax.reload()">
-            <x-icon-sync />
-        </button>
+        
+        @if ($dataTableInstance)
+            <button class="tw-text-gray-500 hover:tw-text-gray-900 tw-transition-colors"
+                onclick="{{ $dataTableInstance }}.ajax.reload()">
+                <x-icon-sync />
+            </button>
+        @endif
     </div>
 
     @if ($target)
