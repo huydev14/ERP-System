@@ -5,12 +5,14 @@ namespace App\Models;
 use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
 
 #[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements JWTSubject
@@ -72,6 +74,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Team::class, 'team_id');
     }
 
+    // --- JWT Authentication ---------------
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -83,6 +86,13 @@ class User extends Authenticatable implements JWTSubject
             'email' => $this->email,
         ];
     }
+
+    // --- Spatie activity log ---------------
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject');
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

@@ -116,24 +116,7 @@
             </ul>
         </li>
 
-        {{-- System configuration --}}
-        <li class="nav-item menu-open {{ request()->routeIs('users.*') ? 'menu-is-opening ' : '' }}"">
-            <a href="#" class="nav-link">
-                <x-icon-setting class="nav-icon" />
-                <p>Cấu hình
-                    <x-icon-chevron-left class="right" />
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ route('audit-logs.index')}}" class="nav-link {{ request()->routeIs('audit-logs.index') ? 'active' : '' }}">
-                        <p>Audit logs</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        {{-- Tài khoản --}}
+        {{-- Account --}}
         <li class="nav-item menu-open {{ request()->routeIs('users.*') ? 'menu-is-opening ' : '' }}">
             <a href="#" class="nav-link">
                 <x-icon-people-setting class="nav-icon" />
@@ -148,12 +131,36 @@
                         <p>Quản lý tài khoản</p>
                     </a>
                 </li>
-            </ul>
-            <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="{{ route('roles.index') }}"
                         class="nav-link {{ request()->routeIs('roles.index') ? 'active' : '' }}">
                         <p>Roles & Permissions</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        {{-- System configuration --}}
+        <li class="nav-item menu-open {{ request()->routeIs('users.*') ? 'menu-is-opening ' : '' }}"">
+            <a href="#" class="nav-link">
+                <x-icon-setting class="nav-icon" />
+                <p>Hệ thống
+                    <x-icon-chevron-left class="right" />
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('audit-logs.index') }}"
+                        class="nav-link {{ request()->routeIs('audit-logs.index') ? 'active' : '' }}">
+                        <p>Audit logs</p>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link ">
+                        <p>Cài đặt</p>
                     </a>
                 </li>
             </ul>
