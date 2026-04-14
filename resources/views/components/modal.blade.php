@@ -6,11 +6,10 @@
         {{ $slot }}
 
         <div class="tw-bg-gray-50/50 tw-border-t tw-border-gray-100 tw-flex tw-justify-end">
-            <button onclick="ModalHelper.close('modal)"
+            <button onclick="ModalHelper.close('modal')"
                 class="tw-bg-gray-200 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-gray-700 hover:tw-bg-gray-300 tw-transition-colors">
                 Đóng lại
             </button>
         </div>
-
     </div>
 </div>

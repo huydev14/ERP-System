@@ -1,5 +1,5 @@
 {{-- Component: Toolbar --}}
-@props(['target' => null, 'btnId' => '', 'dataTableInstance' => ''])
+@props(['dataTableInstance' => ''])
 
 <div class="fluent-toolbar tw-flex tw-items-center tw-w-full tw-gap-4 tw-border-b tw-border-gray-200">
     <div class="tw-relative tw-flex-1">
@@ -33,7 +33,5 @@
         @endif
     </div>
 
-    @if ($target)
-        <x-create-button :btnId="$btnId" :target="$target" />
-    @endif
+    {{ $slot }}
 </div>

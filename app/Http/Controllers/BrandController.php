@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Carbon\Carbon;
+use DragonCode\Support\Facades\Helpers\Str;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +46,7 @@ class BrandController extends Controller
                 ->editColumn('action', function ($brand) {
                     return view('brands._brands-action', compact('brand'))->render();
                 })
-                ->rawColumns(['is_active','logo','action'])
+                ->rawColumns(['is_active', 'logo', 'action'])
                 ->make(true);
         }
     }
@@ -60,7 +61,7 @@ class BrandController extends Controller
 
         return response()->json([
             'isActive' => $isActive,
-            '$brandName' => $brandNames,
+            'brandName' => $brandNames,
         ]);
     }
 
@@ -73,12 +74,29 @@ class BrandController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|min:2|max:255|unique:brands,name',
-            'website' => 'nullable|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ], [
+            'name.required' => 'Vui lòng nhập tên thương hiệu.',
+            'name.unique' => 'Tên thương hiệu này đã tồn tại trên hệ thống.',
+            'logo.max' => 'Kích thước ảnh logo không được vượt quá 2MB.',
         ]);
-        try {
-            $brand = Brand::create($data);
 
-            return response()->json(['success' => true, 'msg' => 'Thêm thương hiệu thành công'], 200);
+        $logoPath = null;
+
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('brands', 'public');
+        }
+        try {
+            $brand = Brand::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'website' => $request->website,
+                'logo' => $logoPath,
+                'is_active' => $request->has('is_active'),
+            ]);
+
+            return response()->json(['success' => true, 'msg' => 'Thêm thương hiệu thành công!'], 200);
         } catch (Exception $e) {
 
             Log::error('Create brand failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
@@ -88,7 +106,6 @@ class BrandController extends Controller
             ], 500);
         }
     }
-
     public function edit()
     {
         return view('brands.edit');

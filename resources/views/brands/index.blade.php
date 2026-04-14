@@ -5,7 +5,9 @@
         <div class="card-header tw-bg-white tw-border-b-0">
 
             {{-- Toolbar --}}
-            <x-toolbar target="slideover-create-user" btnId="btn-open-create" dataTableInstance="brandTable" />
+            <x-toolbar dataTableInstance="brandTable">
+                <x-create-button btnId="create-brand" />
+            </x-toolbar>
 
             <div id="filter-panel" class="tw-py-3">
 
@@ -43,8 +45,8 @@
         </div>
     </div>
 
-   <x-modal>
-        <div id="create-brand-modal"></div>
+    <x-modal>
+        <div id="create-brand-content"></div>
     </x-modal>
 
     @push('scripts')

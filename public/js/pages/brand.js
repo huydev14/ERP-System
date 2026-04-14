@@ -69,7 +69,6 @@ $(function () {
             bottomEnd: 'paging',
         },
     });
-
     $('#custom-search-input').on('keyup', function () {
         brandTable.search(this.value).draw();
     });
@@ -173,16 +172,14 @@ $(function () {
         });
     });
 
-    $('#brandTable').on('click', '#create-brand', function () {
+    $(document).on('click', '#create-brand', function () {
         ModalHelper.open('modal');
-        $('#audit-logs-content').html(loadingHtml);
+        $('#create-brand-content').html(loadingHtml);
 
-        const showUrl = $(this).data('show-url');
-
-        $.get(showUrl, function (html) {
-            $('#audit-logs-content').html(html);
+        $.get('/brands/create', function (html) {
+            $('#create-brand-content').html(html);
         }).fail(function (xhr) {
-            $('#audit-logs-content').html(loadingHtml);
+            $('#create-brand-content').html(loadingHtml);
             console.error('Load create modal error:', xhr.status);
             console.error('Load create modal error:', xhr.responseText);
         });

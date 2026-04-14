@@ -64,3 +64,14 @@ $(function () {
         }
     });
 });
+
+function previewBrandLogo(input) {
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            $('#logo-preview').attr('src', e.target.result).removeClass('tw-hidden');
+            $('#logo-placeholder').addClass('tw-hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
