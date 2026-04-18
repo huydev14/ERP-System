@@ -1,4 +1,122 @@
 $(function () {
+    const routes = globalThis.BrandRoutes;
+    const i18n = globalThis.BrandI18n;
+
+    function toastSuccess(description, statusCode) {
+        fluentToast({
+            type: 'success',
+            title: i18n.successTitle,
+            description: description,
+            subtitle: 'Code: ' + statusCode,
+            actionType: 'close',
+        });
+    }
+
+    function openBrandModal(url) {
+        ModalHelper.open('modal');
+        $('#brand-modal-content').html(loadingHtml);
+
+        $.get(url, function (html) {
+            $('#brand-modal-content').html(html);
+        }).fail(function (xhr) {
+            $('#brand-modal-content').html(loadingHtml);
+            console.error('Load brand modal error:', xhr.status);
+            console.error('Load brand modal error:', xhr.responseText);
+        });
+    }
+
+    function handleBrandFormSubmit(formSelector) {
+        $(document).on('submit', formSelector, function (e) {
+            e.preventDefault();
+            let form = $(this);
+            let formData = new FormData(this);
+            let submitBtn = form.find('button[type="submit"]');
+
+            let originalBtnText = submitBtn.html();
+            submitBtn
+                .html('<i class="fas fa-spinner fa-spin tw-mr-2"></i> ' + (i18n.saveLoading || 'Saving...'))
+                .prop('disabled', true);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res, textStatus, xhr) {
+                    if (res.success) {
+                        ModalHelper.close('modal');
+                        brandTable.ajax.reload(null, false);
+                        toastSuccess(res.msg, xhr.status);
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON?.errors || {};
+
+                        if (!Object.keys(errors).length) {
+                            fluentToast({
+                                type: 'error',
+                                title: i18n.processFailedTitle || 'Process failed',
+                                description: i18n.processFailedDescription || 'Invalid data. Please check your inputs.',
+                                subtitle: 'Code: ' + ' ' + xhr.status,
+                                actionType: 'close',
+                            });
+                            return;
+                        }
+
+                        let firstErrorMsg = Object.values(errors)[0][0];
+                        fluentToast({
+                            type: 'error',
+                            title: i18n.processFailedTitle,
+                            description: firstErrorMsg,
+                            subtitle: 'Code: ' + xhr.status,
+                            actionType: 'close',
+                        });
+                    } else {
+                        fluentToast({
+                            type: 'error',
+                            title: i18n.systemErrorTitle,
+                            description: xhr.responseJSON?.msg || i18n.systemErrorDescription,
+                            subtitle: 'Code: ' + ' ' + xhr.status,
+                            actionType: 'close',
+                        });
+                    }
+                },
+                complete: function () {
+                    submitBtn.html(originalBtnText).prop('disabled', false);
+                },
+            });
+        });
+    }
+
+    function attemptRestoreBrand(restoreUrl) {
+        $.ajax({
+            type: 'POST',
+            url: restoreUrl,
+            success: function (res) {
+                brandTable.ajax.reload(null, false);
+
+                fluentToast({
+                    type: 'success',
+                    title: i18n.undoSuccessTitle,
+                    description: res.msg || i18n.undoSuccessDescription,
+                    actionType: 'close',
+                });
+            },
+            error: function (xhr) {
+                fluentToast({
+                    type: 'error',
+                    title: i18n.restoreErrorTitle,
+                    description: xhr.responseJSON?.msg || i18n.restoreErrorDescription,
+                    subtitle: 'Code: ' + ' ' + xhr.status,
+                });
+                console.error('Load error:', xhr.status);
+                console.error('Load error:', xhr.responseText);
+            },
+        });
+    }
+
     // ---- RENDER TABLE --------------------------
     globalThis.brandTable = new DataTable('#brandTable', {
         processing: true,
@@ -6,7 +124,7 @@ $(function () {
         autoWidth: false,
         order: [[3, 'desc']],
         ajax: {
-            url: '/brands/data',
+            url: routes.data,
             data: function (d) {
                 d.status = $('#f_brandName').val() || '';
                 d.department_id = $('#f_isActive').val() || '';
@@ -34,8 +152,8 @@ $(function () {
                 name: 'is_active',
             },
             {
-                data: 'updated_at',
-                name: 'updated_at',
+                data: 'created_at',
+                name: 'created_at',
             },
             {
                 data: 'updated_at',
@@ -87,7 +205,7 @@ $(function () {
     });
 
     // ---- RENDER OPTIONS FOR SELECT FIELDs ----------------
-    $.getJSON('/brands/filter-data')
+    $.getJSON(routes.filterData)
         .done(function (res) {
             renderOptions('#f_brandName', res.brandName);
             renderOptions('#f_isActive', res.isActive);
@@ -103,7 +221,7 @@ $(function () {
         let deleteUrl = $btn.data('delete-url');
         let restoreUrl = $btn.data('restore-url');
 
-        if (!confirm('Confirm delete?')) {
+        if (!confirm(i18n.confirmDelete)) {
             return;
         }
 
@@ -116,39 +234,15 @@ $(function () {
                 brandTable.ajax.reload(null, false);
                 fluentToast({
                     type: 'info',
-                    title: 'Đã xóa thương hiệu',
-                    description: 'Thương hiệu đã chuyển vào thùng rác.',
+                    title: i18n.deletingTitle,
+                    description: i18n.deletingDescription,
                     subtitle: res.status,
                     actionType: 'close',
                     bottomActions: [
                         {
-                            text: 'Hoàn tác',
-
+                            text: i18n.undo,
                             onClick: function () {
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '/brands/restore/' + data.id,
-                                    success: function (res) {
-                                        brandTable.ajax.reload(null, false);
-
-                                        fluentToast({
-                                            type: 'success',
-                                            title: 'Hoàn tác thành công',
-                                            description: 'Tài khoản nhân viên đã được khôi phục hoạt động.',
-                                            actionType: 'close',
-                                        });
-                                    },
-                                    error: function (xhr) {
-                                        fluentToast({
-                                            type: 'error',
-                                            title: 'Lỗi khôi phục',
-                                            description: 'Không thể hoàn tác thao tác này.',
-                                            subtitle: 'Mã lỗi: ' + xhr.status,
-                                        });
-                                        console.error('Load error:', xhr.status);
-                                        console.error('Load error:', xhr.responseText);
-                                    },
-                                });
+                                attemptRestoreBrand(restoreUrl);
                             },
                         },
                     ],
@@ -157,9 +251,9 @@ $(function () {
             error: function (xhr) {
                 fluentToast({
                     type: 'error',
-                    title: 'Đã xảy ra lỗi!',
-                    description: 'Hãy thử lại sau',
-                    subtitle: 'Mã lỗi: ' + xhr.status,
+                    title: i18n.genericErrorTitle,
+                    description: xhr.responseJSON?.msg || i18n.genericErrorDescription,
+                    subtitle: 'Code: ' + xhr.status,
                     actionType: 'close',
                 });
                 console.error('Load error:', xhr.status);
@@ -172,73 +266,13 @@ $(function () {
     });
 
     $(document).on('click', '#create-brand', function () {
-        ModalHelper.open('modal');
-        $('#create-brand-content').html(loadingHtml);
-
-        $.get('/brands/create', function (html) {
-            $('#create-brand-content').html(html);
-        }).fail(function (xhr) {
-            $('#create-brand-content').html(loadingHtml);
-            console.error('Load create modal error:', xhr.status);
-            console.error('Load create modal error:', xhr.responseText);
-        });
+        openBrandModal(routes.create);
     });
 
-    $(document).on('submit', '#form-create-brand', function (e) {
-        e.preventDefault();
-        let form = $(this);
-        let formData = new FormData(this);
-        let submitBtn = form.find('button[type="submit"]');
-
-        let originalBtnText = submitBtn.html();
-        submitBtn.html('<i class="fas fa-spinner fa-spin tw-mr-2"></i> Đang lưu...').prop('disabled', true);
-
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-
-            success: function (res) {
-                if (res.success) {
-                    globalThis.location.href = res.redirect;
-                }
-            },
-            error: function (xhr) {
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON?.errors || {};
-                    if (!Object.keys(errors).length) {
-                        fluentToast({
-                            type: 'error',
-                            title: 'Xử lý thất bại',
-                            description: 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại các trường nhập.',
-                            subtitle: 'Mã lỗi: ' + xhr.status,
-                            actionType: 'close',
-                        });
-                        return;
-                    }
-                    let firstErrorMsg = Object.values(errors)[0][0];
-                    fluentToast({
-                        type: 'error',
-                        title: 'Xử lý thất bại',
-                        description: firstErrorMsg,
-                        subtitle: 'Mã lỗi: ' + xhr.status,
-                        actionType: 'close',
-                    });
-                } else {
-                    fluentToast({
-                        type: 'error',
-                        title: 'Lỗi hệ thống',
-                        description: xhr.responseJSON?.msg || 'Đã có lỗi hệ thống xảy ra!',
-                        subtitle: 'Mã lỗi: ' + xhr.status,
-                        actionType: 'close',
-                    });
-                }
-            },
-            complete: function () {
-                submitBtn.html(originalBtnText).prop('disabled', false);
-            },
-        });
+    $(document).on('click', '#edit-brand-btn', function () {
+        let editUrl = $(this).data('edit-url');
+        openBrandModal(editUrl);
     });
+
+    handleBrandFormSubmit('#form-create-brand, #form-edit-brand');
 });

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use Carbon\Carbon;
 use DragonCode\Support\Facades\Helpers\Str;
 use Exception;
 use Illuminate\Http\Request;
@@ -29,13 +28,13 @@ class BrandController extends Controller
                         $url = asset('storage/' . $brand->logo);
                         return '<img src="' . $url . '" alt="' . $brand->name . '" class="tw-h-8 tw-w-auto tw-object-contain tw-rounded">';
                     }
-                    return '<span class="tw-text-gray-400 tw-italic tw-text-sm">Không có ảnh</span>';
+                    return '<span class="tw-text-gray-400 tw-italic tw-text-sm">' . __('brand.table.no_logo') . '</span>';
                 })
                 ->editColumn('is_active', function ($brand) {
                     if ($brand->is_active) {
-                        return '<span class="tw-px-2 tw-py-1 tw-bg-green-100 tw-text-green-700 tw-text-xs tw-font-medium tw-rounded-full">Đang hoạt động</span>';
+                        return '<span class="tw-px-2 tw-py-1 tw-bg-green-100 tw-text-green-700 tw-text-xs tw-font-medium tw-rounded-full">' . __('brand.status.active') . '</span>';
                     }
-                    return '<span class="tw-px-2 tw-py-1 tw-bg-gray-100 tw-text-gray-600 tw-text-xs tw-font-medium tw-rounded-full">Đã ẩn</span>';
+                    return '<span class="tw-px-2 tw-py-1 tw-bg-gray-100 tw-text-gray-600 tw-text-xs tw-font-medium tw-rounded-full">' . __('brand.status.hidden') . '</span>';
                 })
 
                 ->editColumn('created_at', function ($brand) {
@@ -55,8 +54,8 @@ class BrandController extends Controller
     public function getFilterData(Request $request)
     {
         $isActive = collect([
-            ['id' => 1, 'text' => 'Đang hoạt động'],
-            ['id' => 0, 'text' => 'Ngừng hoạt động'],
+            ['id' => 1, 'text' => __('brand.status.active')],
+            ['id' => 0, 'text' => __('brand.status.inactive')],
         ]);
         $brandNames = Brand::select('id', 'name as text')->orderBy('name')->get();
 
@@ -78,9 +77,9 @@ class BrandController extends Controller
             'website' => 'nullable|url|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ], [
-            'name.required' => 'Vui lòng nhập tên thương hiệu.',
-            'name.unique' => 'Tên thương hiệu này đã tồn tại trên hệ thống.',
-            'logo.max' => 'Kích thước ảnh logo không được vượt quá 2MB.',
+            'name.required' => __('brand.validation.name_required'),
+            'name.unique' => __('brand.validation.name_unique'),
+            'logo.max' => __('brand.validation.logo_max'),
         ]);
 
         $logoPath = null;
@@ -97,14 +96,14 @@ class BrandController extends Controller
             ]);
 
             if ($request->ajax()) {
-                session()->flash('success', 'Thêm thương hiệu thành công!');
+                session()->flash('success', __('brand.messages.create_success'));
 
                 return response()->json([
                     'success' => true,
-                    'msg' => 'Thêm thương hiệu thành công!',
+                    'msg' => __('brand.messages.create_success'),
                 ], 200);
             }
-            return redirect()->route('brands.index')->with('success', 'Thêm thương hiệu thành công!');
+            return redirect()->route('brands.index')->with('success', __('brand.messages.create_success'));
         } catch (Exception $e) {
             if ($logoPath) {
                 Storage::disk('public')->delete($logoPath);
@@ -115,12 +114,109 @@ class BrandController extends Controller
             ]);
             return response()->json([
                 'status' => 'error',
-                'msg' => 'Lỗi hệ thống'
+                'msg' => __('brand.messages.system_error')
             ], 500);
         }
     }
-    public function edit()
+
+    public function edit(Brand $brand)
     {
-        return view('brands.edit');
+        return view('brands.edit', compact('brand'));
+    }
+
+    public function update(Request $request, Brand $brand)
+    {
+        $request->validate([
+            'name' => 'required|string|min:2|max:255|unique:brands,name,' . $brand->id,
+            'website' => 'nullable|url|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ], [
+            'name.required' => __('brand.validation.name_required'),
+            'name.unique' => __('brand.validation.name_unique'),
+            'logo.max' => __('brand.validation.logo_max'),
+        ]);
+
+        $oldLogoPath = $brand->logo;
+        $newLogoPath = $oldLogoPath;
+
+        if ($request->hasFile('logo')) {
+            $newLogoPath = $request->file('logo')->store('brands', 'public');
+        }
+
+        try {
+            $brand->update([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'website' => $request->website,
+                'logo' => $newLogoPath,
+                'is_active' => $request->has('is_active'),
+            ]);
+
+            if ($request->hasFile('logo') && $oldLogoPath) {
+                Storage::disk('public')->delete($oldLogoPath);
+            }
+
+            return response()->json([
+                'success' => true,
+                'msg' => __('brand.messages.update_success'),
+            ], 200);
+        } catch (Exception $e) {
+            if ($request->hasFile('logo') && $newLogoPath && $newLogoPath !== $oldLogoPath) {
+                Storage::disk('public')->delete($newLogoPath);
+            }
+
+            Log::error('Update brand failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'msg' => __('brand.messages.system_error'),
+            ], 500);
+        }
+    }
+
+    public function destroy(Brand $brand)
+    {
+        try {
+            $brand->delete();
+
+            return response()->json([
+                'success' => true,
+                'status' => 200,
+                'msg' => __('brand.messages.delete_success'),
+            ]);
+        } catch (Exception $e) {
+            Log::error('Delete brand failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'msg' => __('brand.messages.system_error'),
+            ], 500);
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            $brand = Brand::withTrashed()->findOrFail($id);
+            $brand->restore();
+
+            return response()->json([
+                'success' => true,
+                'msg' => __('brand.messages.restore_success'),
+            ]);
+        } catch (Exception $e) {
+            Log::error('Restore brand failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'msg' => __('brand.messages.restore_error'),
+            ], 500);
+        }
     }
 }

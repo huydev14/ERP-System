@@ -56,9 +56,9 @@ Route::middleware('jwt.cookie')->group(function () {
 
     // --- Brands -----------------------------------
     Route::prefix('brands')->name('brands.')->group(function(){
-        Route::resource('/' , BrandController::class);
         Route::get('/data', [BrandController::class, 'data'])->name('data');
         Route::get('/filter-data', [BrandController::class, 'getFilterData'])->name('filter_data');
         Route::post('/{id}/restore', [BrandController::class, 'restore'])->name('restore');
     });
+    Route::resource('brands', BrandController::class);
 });

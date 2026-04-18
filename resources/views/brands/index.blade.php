@@ -13,15 +13,15 @@
             <div id="filter-panel" class="tw-py-3">
 
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-2">
-                    <h4 class="tw-text-base tw-font-bold tw-text-gray-800">Filter</h4>
+                    <h4 class="tw-text-base tw-font-bold tw-text-gray-800">{{ __('brand.filter.title') }}</h4>
                     <button id="close-filter-btn" class="tw-text-gray-400 hover:tw-text-gray-700 tw-transition-colors">
                         <i class="fas fa-times tw-text-lg"></i>
                     </button>
                 </div>
 
                 <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-x-8 tw-gap-y-4">
-                    <x-filter-select id="f_brandName" label="Thương hiệu" />
-                    <x-filter-select id="f_isActive" label="Trạng thái" />
+                    <x-filter-select id="f_brandName" :label="__('brand.filter.brand')" :placeholder="__('brand.filter.placeholder')" />
+                    <x-filter-select id="f_isActive" :label="__('brand.filter.status')" :placeholder="__('brand.filter.placeholder')" />
                 </div>
             </div>
         </div>
@@ -30,15 +30,15 @@
             <table id="brandTable" class="display table table-hover text-nowrap" style="width: 100%;">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Slug</th>
-                        <th>Logo</th>
-                        <th>website</th>
-                        <th>Status</th>
-                        <th>Ngày tạo</th>
-                        <th>Cập nhật</th>
+                        <th>{{ __('brand.table.name') }}</th>
+                        <th>{{ __('brand.table.slug') }}</th>
+                        <th>{{ __('brand.table.logo') }}</th>
+                        <th>{{ __('brand.table.website') }}</th>
+                        <th>{{ __('brand.table.status') }}</th>
+                        <th>{{ __('brand.table.created_at') }}</th>
+                        <th>{{ __('brand.table.updated_at') }}</th>
                         <th>
-                            <div class="tw-text-center">Tác vụ</div>
+                            <div class="tw-text-center">{{ __('brand.table.action') }}</div>
                         </th>
                     </tr>
                 </thead>
@@ -47,19 +47,46 @@
     </div>
 
     <x-modal>
-        <div id="create-brand-content"></div>
+        <div id="brand-modal-content"></div>
     </x-modal>
 
     @push('scripts')
         <script src="{{ asset('js/pages/brand.js') }}"></script>
         <script>
+
+             window.BrandRoutes = {
+                data: "{{ route('brands.data') }}",
+                filterData: "{{ route('brands.filter_data') }}",
+                create: "{{ route('brands.create') }}",
+            };
+
+            window.BrandI18n = {
+                confirmDelete: @json(__('brand.js.confirm_delete')),
+                deletingTitle: @json(__('brand.js.toast.delete_title')),
+                deletingDescription: @json(__('brand.js.toast.delete_description')),
+                undo: @json(__('brand.js.undo')),
+                undoSuccessTitle: @json(__('brand.js.toast.undo_success_title')),
+                undoSuccessDescription: @json(__('brand.js.toast.undo_success_description')),
+                restoreErrorTitle: @json(__('brand.js.toast.restore_error_title')),
+                restoreErrorDescription: @json(__('brand.js.toast.restore_error_description')),
+                genericErrorTitle: @json(__('brand.js.toast.generic_error_title')),
+                genericErrorDescription: @json(__('brand.js.toast.generic_error_description')),
+                saveLoading: @json(__('brand.js.save_loading')),
+                processFailedTitle: @json(__('brand.js.toast.process_failed_title')),
+                processFailedDescription: @json(__('brand.js.toast.process_failed_description')),
+                systemErrorTitle: @json(__('brand.js.toast.system_error_title')),
+                systemErrorDescription: @json(__('brand.js.toast.system_error_description')),
+                codePrefix: @json(__('brand.js.code_prefix')),
+                successTitle: @json(__('brand.js.toast.success_title')),
+            };
+
             $(function() {
                 @if (session('success'))
                     fluentToast({
                         type: 'success',
-                        title: 'Thành công',
+                        title: @json(__('brand.js.toast.success_title')),
                         description: "{{ session('success') }}",
-                        subtitle: 'Code: 200',
+                        subtitle: @json(__('brand.js.code_prefix')) + ' 200',
                         actionType: 'close',
                     });
                 @endif
