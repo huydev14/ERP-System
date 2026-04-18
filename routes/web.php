@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 require __DIR__ . '/auth.php';
 
@@ -70,4 +71,12 @@ Route::middleware('jwt.cookie')->group(function () {
         Route::post('/{id}/restore', [CategoryController::class, 'restore'])->name('restore');
     });
     Route::resource('categories', CategoryController::class);
+
+    // --- Products ---------------------------------
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('/data', [ProductController::class, 'data'])->name('data');
+        Route::get('/filter-data', [ProductController::class, 'getFilterData'])->name('filter_data');
+        Route::post('/{id}/restore', [ProductController::class, 'restore'])->name('restore');
+    });
+    Route::resource('products', ProductController::class);
 });
