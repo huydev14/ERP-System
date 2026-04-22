@@ -20,6 +20,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@client': '/resources/js/client',
+            '@scss': '/resources/scss'
         },
     },
 });
