@@ -35,7 +35,7 @@ api.interceptors.response.use(
                     }
 
                     const res = await axios.post(
-                        '/api/v1/refresh',
+                        '/refresh',
                         {},
                         {
                             baseURL: '/api/v1',

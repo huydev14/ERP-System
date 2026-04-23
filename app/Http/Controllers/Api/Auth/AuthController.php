@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         if (!$token) {
             return response()->json([
-                'success' => true,
+                'success' => false,
                 'message' => 'Email hoặc mật khẩu không chính xác'
             ], 401);
         }
@@ -95,9 +95,7 @@ class AuthController extends Controller
     public function refresh(Request $request)
     {
         try {
-            $refreshToken = $request->cookie('refresh_token');
-
-            if (!$refreshToken) {
+            if (!$request->cookie('refresh_token')) {
                 throw new Exception('Không tìm thấy Refresh Token trong Cookie');
             }
 

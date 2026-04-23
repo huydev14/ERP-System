@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', {
         async silentRefresh() {
             try {
                 const res = await axios.post(
-                    '/api/v1/refresh',
+                    '/refresh',
                     {},
                     {
                         baseURL: 'api/v1',
@@ -44,6 +44,8 @@ export const useAuthStore = defineStore('auth', {
 
                 this.token = res.data.data.access_token;
                 this.user = res.data.data.user;
+
+                authChannel.postMessage({ type: 'TOKEN_REFRESHED', token: this.token });
                 return true;
             } catch (error) {
                 this.forceLogout();
@@ -57,20 +59,21 @@ export const useAuthStore = defineStore('auth', {
             } finally {
                 this.forceLogout();
                 authChannel.postMessage({ type: 'LOGOUT' });
-                window.location.href = '/client/login';
+                router.push({ name: 'Login' });
             }
         },
 
         forceLogout() {
             this.user = null;
             this.token = null;
+            delete api.defaults.headers.common['Authorization'];
         },
 
         setupListeners() {
             authChannel.onmessage = (event) => {
                 if (event.data.type === 'LOGOUT') {
                     this.forceLogout();
-                    window.location.href = '/client/login';
+                    window.location.href = '/login';
                 }
                 if (event.data.type === 'TOKEN_REFRESHED' || event.data.type === 'LOGIN') {
                     this.setToken(event.data.token);
