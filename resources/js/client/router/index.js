@@ -11,13 +11,19 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('@client/pages/Login.vue'),
-        // meta: { guestOnly: true },
+        meta: { guestOnly: true },
     },
     {
         path: '/register',
         name: 'Register',
         component: () => import('@client/pages/Register.vue'),
-        // meta: { guestOnly: true },
+        meta: { guestOnly: true },
+    },
+    {
+        path: '/verify-otp',
+        name: 'VerifyOTP',
+        component: () => import('@client/pages/VerifyOTP.vue'),
+        meta: { guestOnly: true },
     },
     // {
     //     path: '/profile',

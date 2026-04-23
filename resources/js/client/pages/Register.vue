@@ -1,9 +1,5 @@
 <template>
-    <AuthLayout
-        title="Tạo tài khoản"
-        :errorMessage="errorMessage"
-        actionText="tạo tài khoản"
-    >
+    <AuthLayout title="Tạo tài khoản" :errorMessage="errorMessage" actionText="tạo tài khoản">
         <form @submit.prevent="handleRegister" class="login-form">
             <div class="a-input-text-group">
                 <label for="name" class="a-form-label">Họ và tên của bạn</label>
@@ -17,23 +13,16 @@
 
             <div class="a-input-text-group">
                 <label for="password" class="a-form-label">Mật khẩu</label>
-                <input
-                    id="password"
-                    type="password"
-                    v-model="form.password"
-                    required
-                    placeholder="Ít nhất 6 ký tự"
-                    class="a-input-text"
-                />
+                <input id="password" type="password" v-model="form.password" required placeholder="Ít nhất 6 ký tự" class="a-input-text" />
                 <div class="a-alert-inline" v-if="form.password.length > 0 && form.password.length < 6">
-                    <i>i</i> Mật khẩu phải có ít nhất 6 ký tự.
+                    Mật khẩu phải có ít nhất 6 ký tự.
                 </div>
             </div>
 
             <div class="a-input-text-group">
                 <label for="password_confirmation" class="a-form-label">Nhập lại mật khẩu</label>
                 <input id="password_confirmation" type="password" v-model="form.password_confirmation" required class="a-input-text" />
-                <div class="a-alert-inline error-text" v-if="passwordMismatch"><i>!</i> Mật khẩu không khớp.</div>
+                <div class="a-alert-inline error-text" v-if="passwordMismatch">Mật khẩu không khớp.</div>
             </div>
 
             <button type="submit" class="a-button-primary" :disabled="isLoading || passwordMismatch || form.password.length < 6">
@@ -57,8 +46,11 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../services/api';
 import AuthLayout from '@client/layouts/AuthLayout.vue';
-
 const router = useRouter();
+const route = useRoute();
+
+  onMounted(() => { if (route.query.email) { form.email = route.query.email; } });
+
 const authStore = useAuthStore();
 
 const form = reactive({
@@ -85,11 +77,10 @@ const handleRegister = async () => {
         const response = await api.post('/register', form);
 
         if (response.data.success) {
-            await authStore.login({
-                email: form.email,
-                password: form.password,
+            router.push({
+                name: 'VerifyOTP',
+                query: { email: form.email },
             });
-            router.push({ name: 'Home' });
         }
     } catch (error) {
         if (error.response && error.response.status === 422) {

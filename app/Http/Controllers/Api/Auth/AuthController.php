@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -33,17 +35,31 @@ class AuthController extends Controller
         return $this->responseWithToken($token);
     }
 
+    public function checkEmail(Request $request){
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $exists = DB::table('customers')->where('email', $request->email)->exists();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'exists' => $exists
+            ]
+        ]);
+    }
+
     public function register(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:customers,email',
             'password' => 'required|string|min:6|confirmed',
         ], [
             'email.unique' => 'Địa chỉ email này đã được sử dụng.',
         ]);
 
-        $user = User::create([
+        $user = Customer::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
