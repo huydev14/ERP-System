@@ -2,8 +2,8 @@
     <AuthLayout title="Tạo tài khoản" :errorMessage="errorMessage" actionText="tạo tài khoản">
         <form @submit.prevent="handleRegister" class="login-form">
             <div class="a-input-text-group">
-                <label for="name" class="a-form-label">Họ và tên của bạn</label>
-                <input id="name" type="text" v-model="form.name" required placeholder="Họ và tên" class="a-input-text" />
+                <label for="fullname" class="a-form-label">Họ và tên của bạn</label>
+                <input id="fullname" type="text" v-model="form.fullname" required placeholder="Họ và tên" class="a-input-text" />
             </div>
 
             <div class="a-input-text-group">
@@ -41,20 +41,24 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, reactive, computed, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../services/api';
 import AuthLayout from '@client/layouts/AuthLayout.vue';
 const router = useRouter();
 const route = useRoute();
 
-  onMounted(() => { if (route.query.email) { form.email = route.query.email; } });
+onMounted(() => {
+    if (route.query.email) {
+        form.email = route.query.email;
+    }
+});
 
 const authStore = useAuthStore();
 
 const form = reactive({
-    name: '',
+    fullname: '',
     email: '',
     password: '',
     password_confirmation: '',

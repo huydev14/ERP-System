@@ -23,7 +23,6 @@ const routes = [
         path: '/verify-otp',
         name: 'VerifyOTP',
         component: () => import('@client/pages/VerifyOTP.vue'),
-        meta: { guestOnly: true },
     },
     // {
     //     path: '/profile',
@@ -42,15 +41,15 @@ router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
     const isAuthenticated = authStore.isLoggedIn;
 
-    if(to.meta.requiresAuth && !isAuthenticated) {
-        next({name: 'Login'});
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        next({ name: 'Login' });
     }
     else if (to.meta.guestOnly && isAuthenticated) {
-        next({ name: 'Home'});
+        next({ name: 'Home' });
     }
     else {
         next();
     }
-})
+});
 
 export default router;

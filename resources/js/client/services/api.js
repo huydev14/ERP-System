@@ -8,8 +8,6 @@ const api = axios.create({
     },
 });
 
-const authChannel = new BroadcastChannel('auth_sync_channel');
-
 api.interceptors.request.use((config) => {
     const store = useAuthStore();
     if (store.token) {
@@ -24,38 +22,31 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/refresh') {
-            originalRequest._retry = true;
+            originalRequest._retry = true; 
+            const store = useAuthStore();
 
             try {
-                const newToken = await navigator.locks.request('refresh_token_lock', async () => {
-                    const store = useAuthStore();
+                const res = await axios.post(
+                    '/refresh',
+                    {},
+                    {
+                        baseURL: '/api/v1',
+                        withCredentials: true,
+                    },
+                );
 
-                    if (store.token && store.token !== originalRequest.headers.Authorization?.split(' ')[1]) {
-                        return store.token;
-                    }
+                const { access_token, user } = res.data.data;
 
-                    const res = await axios.post(
-                        '/refresh',
-                        {},
-                        {
-                            baseURL: '/api/v1',
-                            withCredentials: true,
-                        },
-                    );
+                store.token = access_token;
+                store.user = user;
 
-                    const refreshedToken = res.data.data.access_token;
+                localStorage.setItem('access_token', access_token);
+                localStorage.setItem('user', JSON.stringify(user));
 
-                    store.setToken(refreshedToken);
-                    authChannel.postMessage({ type: 'TOKEN_REFRESHED', token: refreshedToken });
-
-                    return refreshedToken;
-                });
-                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                originalRequest.headers.Authorization = `Bearer ${access_token}`;
                 return api(originalRequest);
             } catch (refreshError) {
-                const store = useAuthStore();
                 store.forceLogout();
-                authChannel.postMessage({ type: 'LOGOUT' });
                 return Promise.reject(refreshError);
             }
         }
@@ -63,5 +54,4 @@ api.interceptors.response.use(
         return Promise.reject(error);
     },
 );
-
 export default api;

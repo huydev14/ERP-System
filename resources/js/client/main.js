@@ -13,8 +13,6 @@ app.use(router);
 
 const authStore = useAuthStore(pinia);
 
-authStore.setupListeners();
-
 authStore.silentRefresh().finally(() => {
     app.mount('#client-app');
 });

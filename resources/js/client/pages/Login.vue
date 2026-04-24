@@ -99,7 +99,6 @@ const actionText = computed(() => {
     return step.value === 'password' ? 'đăng nhập' : 'tiếp tục';
 });
 
-// Gọi API kiểm tra Email
 const handleCheckEmail = async () => {
     if (!form.email) return;
 

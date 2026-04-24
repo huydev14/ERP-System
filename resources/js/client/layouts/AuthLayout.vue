@@ -1,7 +1,7 @@
 <template>
     <div class="amazon-login-container">
         <div class="logo-container">
-            <router-link to="/client" class="logo-link">
+            <router-link :to="{ name: 'Home' }" class="logo-link">
                 <span class="logo-text">Amazon</span>
             </router-link>
         </div>

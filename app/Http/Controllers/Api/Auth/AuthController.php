@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 class AuthController extends Controller
 {
@@ -181,12 +182,13 @@ class AuthController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => 'Thành công',
             'data' => [
                 'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => config('jwt.ttl') * 60,
                 'user' => $this->guard()->user(),
             ]
-        ])->withCookie('refresh_token', $token, config('jwt.refresh_ttl'));
+        ])->withCookie(cookie('refresh_token', $token, config('jwt.refresh_ttl')));
     }
 
     public function refresh(Request $request)
@@ -194,16 +196,25 @@ class AuthController extends Controller
         $refreshToken = $request->cookie('refresh_token');
         try {
             if (!$refreshToken) {
-                throw new Exception('Không tìm thấy Refresh Token trong Cookie');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy phiên làm việc'
+                ], 401);
             }
 
             $newToken = $this->guard()->setToken($refreshToken)->refresh();
 
             return $this->responseWithToken($newToken);
+
+        } catch (TokenBlacklistedException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Phiên đăng nhập đã bị thu hồi'
+            ], 401);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Phiên đăng nhập đã hết hạn'
+                'message' => 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn'
             ], 401);
         }
     }

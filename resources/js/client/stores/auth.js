@@ -1,13 +1,12 @@
 import { defineStore } from 'pinia';
 import api from '../services/api';
 import axios from 'axios';
-
-const authChannel = new BroadcastChannel('auth_sync_channel');
+import router from '../router';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        user: null,
-        token: null,
+        user: JSON.parse(localStorage.getItem('user') || null),
+        token: localStorage.getItem('access_token' || null),
     }),
 
     getters: {
@@ -23,10 +22,15 @@ export const useAuthStore = defineStore('auth', {
             const response = await api.post('/login', credentials);
 
             if (response.data.success) {
-                this.token = response.data.data.access_token;
-                this.user = response.data.data.user;
+                const { access_token, user } = response.data.data;
 
-                authChannel.postMessage({ type: 'LOGIN', token: this.token });
+                this.token = access_token;
+                this.user = user;
+
+                localStorage.setItem('access_token', access_token);
+                localStorage.setItem('user', JSON.stringify(user));
+
+                api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
             }
             return response.data;
         },
@@ -37,15 +41,19 @@ export const useAuthStore = defineStore('auth', {
                     '/refresh',
                     {},
                     {
-                        baseURL: 'api/v1',
+                        baseURL: '/api/v1',
                         withCredentials: true,
                     },
                 );
 
-                this.token = res.data.data.access_token;
-                this.user = res.data.data.user;
+                const { access_token, user } = res.data.data;
 
-                authChannel.postMessage({ type: 'TOKEN_REFRESHED', token: this.token });
+                this.token = access_token;
+                this.user = user;
+
+                localStorage.setItem('access_token', access_token);
+                localStorage.setItem('user', JSON.stringify(user));
+
                 return true;
             } catch (error) {
                 this.forceLogout();
@@ -58,7 +66,6 @@ export const useAuthStore = defineStore('auth', {
                 await api.post('/logout');
             } finally {
                 this.forceLogout();
-                authChannel.postMessage({ type: 'LOGOUT' });
                 router.push({ name: 'Login' });
             }
         },
@@ -66,19 +73,12 @@ export const useAuthStore = defineStore('auth', {
         forceLogout() {
             this.user = null;
             this.token = null;
-            delete api.defaults.headers.common['Authorization'];
-        },
 
-        setupListeners() {
-            authChannel.onmessage = (event) => {
-                if (event.data.type === 'LOGOUT') {
-                    this.forceLogout();
-                    window.location.href = '/login';
-                }
-                if (event.data.type === 'TOKEN_REFRESHED' || event.data.type === 'LOGIN') {
-                    this.setToken(event.data.token);
-                }
-            };
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+
+            delete api.defaults.headers.common['Authorization'];
+            router.push({ name: 'Login' });
         },
     },
 });
