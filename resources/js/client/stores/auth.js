@@ -5,7 +5,7 @@ import router from '../router';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        user: JSON.parse(localStorage.getItem('user') || null),
+        user: JSON.parse(localStorage.getItem('user')) || null,
         token: localStorage.getItem('access_token' || null),
     }),
 
@@ -14,10 +14,6 @@ export const useAuthStore = defineStore('auth', {
     },
 
     actions: {
-        setToken(newToken) {
-            this.token = newToken;
-        },
-
         async login(credentials) {
             const response = await api.post('/login', credentials);
 

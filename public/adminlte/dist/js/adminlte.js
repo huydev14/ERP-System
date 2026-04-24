@@ -1640,7 +1640,6 @@
 
         var _options = $__default["default"].extend({}, Default$7, typeof config === 'object' ? config : data);
 
-        localStorage.setItem('AdminLTE:IFrame:Options', JSON.stringify(_options));
         var plugin = new IFrame($__default["default"](this), _options);
         $__default["default"](this).data(DATA_KEY$7, typeof config === 'object' ? config : data);
 
@@ -1648,7 +1647,6 @@
           plugin[config]();
         }
       } else {
-        new IFrame($__default["default"](this), JSON.parse(localStorage.getItem('AdminLTE:IFrame:Options')))._initFrameElement();
       }
     };
 

@@ -185,7 +185,6 @@ class AuthController extends Controller
             'data' => [
                 'access_token' => $token,
                 'token_type' => 'bearer',
-                'expires_in' => config('jwt.ttl') * 60,
                 'user' => $this->guard()->user(),
             ]
         ])->withCookie(cookie('refresh_token', $token, config('jwt.refresh_ttl')));
