@@ -5,7 +5,7 @@
                 <p>Để xác minh email của bạn, chúng tôi đã gửi Mã pin một lần (OTP) đến</p>
                 <div class="email-display">
                     <strong>{{ email }}</strong>
-                    <router-link to="/client/register" class="a-link-normal change-email-link">Thay đổi</router-link>
+                    <router-link :to="{ name: 'Register' }" class="a-link-normal change-email-link">Thay đổi</router-link>
                 </div>
             </div>
 

@@ -3,18 +3,36 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\CustomerOTPMail;
 use App\Models\Customer;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
     protected function guard()
     {
         return Auth::guard('api_customer');
+    }
+
+    public function checkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $exists = Customer::where('email', $request->email)->exists();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'exists' => $exists
+            ]
+        ]);
     }
 
     public function login(Request $request)
@@ -32,46 +50,109 @@ class AuthController extends Controller
                 'message' => 'Email hoặc mật khẩu không chính xác'
             ], 401);
         }
+
+        $customer = $this->guard()->user();
+        if (!$customer->email_verified_at) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tài khoản chưa được xác minh.',
+                'require_verify' => true,
+            ], 403);
+        }
         return $this->responseWithToken($token);
-    }
-
-    public function checkEmail(Request $request){
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-        $exists = DB::table('customers')->where('email', $request->email)->exists();
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'exists' => $exists
-            ]
-        ]);
     }
 
     public function register(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
+        $validated = $request->validate([
+            'fullname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:customers,email',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|min:6|confirmed',
         ], [
             'email.unique' => 'Địa chỉ email này đã được sử dụng.',
         ]);
 
-        $user = Customer::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        $customer = Customer::create([
+            'fullname' => $validated['fullname'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
+
+        //Create OTP and send mail
+        $otp = rand(100000, 999999);
+
+        Cache::put('otp_' . $customer->email, $otp, now()->addMinutes(10));
+
+        Mail::to($customer->email)->send(new CustomerOTPMail($otp, $customer->fullname));
 
         return response()->json([
             'success' => true,
-            'message' => 'Tạo tài khoản thành công',
-            'data' => [
-                'user' => $user
-            ]
-        ], 201);
+            'message' => 'Đăng ký thành công. Vui lòng kiểm tra email để lấy mã OTP.',
+        ]);
+    }
+
+    public function verifyOTP(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|string|size:6',
+        ]);
+
+        $email = $request->email;
+        $userOtp = $request->otp;
+
+        $cachedOtp = Cache::get('otp_' . $email);
+
+        if (!$cachedOtp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã OTP đã hết hạn. Vui lòng gửi lại mã mới.'
+            ], 400);
+        }
+
+        if ($userOtp != $cachedOtp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã OTP không chính xác.'
+            ], 400);
+        }
+
+        $customer = Customer::where('email', $email)->first();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy thông tin khách hàng.'
+            ], 404);
+        }
+
+        //Update customer verified status
+        $customer->update([
+            'email_verified_at' => now()
+        ]);
+
+        Cache::forget('otp_' . $email);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Xác thực email thành công! Bây giờ bạn có thể đăng nhập.'
+        ]);
+    }
+
+    public function resendOTP(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+        $customer = Customer::where('email', $request->email)->first();
+        if (!$customer) {
+            return response()->json(['success' => false, 'message' => 'Email không tồn tại.'], 404);
+        }
+        $otp = rand(100000, 999999);
+        Cache::put('otp_' . $customer->email, $otp, now()->addMinutes(10));
+        Mail::to($customer->email)->send(new CustomerOTPMail($otp, $customer->fullname));
+        return response()->json([
+            'success' => true,
+            'message' => 'Mã OTP mới đã được gửi vào email của bạn.'
+        ]);
     }
 
     public function me()
@@ -110,8 +191,9 @@ class AuthController extends Controller
 
     public function refresh(Request $request)
     {
+        $refreshToken = $request->cookie('refresh_token');
         try {
-            if (!$request->cookie('refresh_token')) {
+            if (!$refreshToken) {
                 throw new Exception('Không tìm thấy Refresh Token trong Cookie');
             }
 
