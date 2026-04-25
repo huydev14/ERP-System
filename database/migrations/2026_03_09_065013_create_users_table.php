@@ -17,7 +17,7 @@ return new class extends Migration
             // User Credentials
             $table->string('name')->nullable();
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken()->nullable();
 
