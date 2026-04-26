@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SocialAccount;
-use App\Models\User;
-use App\Models\Customer;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -22,56 +19,21 @@ class SocialAccountController extends Controller
 
     public function callback(Request $request, $provider)
     {
-        if ($request->has('error') || !$request->has('code')) {
-            return view('auth.callback', ['error' => 'Từ chối truy cập hoặc lỗi từ ' . $provider]);
-        }
         try {
-            $state = $request->input('state');
-            parse_str($state, $stateParams);
-            $type = $stateParams['type'] ?? 'user';
+            $socialAuthService = new \App\Services\SocialAuthService();
+            [$user, $type] = $socialAuthService->handleProviderCallback($provider);
 
-            $socialUser = Socialite::driver($provider)->stateless()->user();
-            $socialAccount = SocialAccount::where('provider_name', $provider)
-                ->where('provider_id', $socialUser->getId())
-                ->first();
-
-            if ($socialAccount) {
-                $user = ($type === 'customer') ? $socialAccount->customer : $socialAccount->user;
-            } else {
-                if ($type === 'customer') {
-                    $user = Customer::where('email', $socialUser->getEmail())->first();
-                    if (!$user) {
-                        $user = Customer::create([
-                            'fullname' => $socialUser->getName(),
-                            'email' => $socialUser->getEmail(),
-                            'avatar' => $socialUser->getAvatar(),
-                            'email_verified_at' => now(),
-                        ]);
-                    }
-                } else {
-                    $user = User::where('email', $socialUser->getEmail())->first();
-                    if (!$user) {
-                        $user = User::create([
-                            'name' => $socialUser->getName(),
-                            'email' => $socialUser->getEmail(),
-                            'email_verified_at' => now(),
-                        ]);
-                    }
-                }
-
-                $user->socialAccounts()->create([
-                    'provider_name' => $provider,
-                    'provider_id' => $socialUser->getId(),
-                ]);
-            }
-
+            //Login user and generate token
             $guard = ($type === 'customer') ? 'api_customer' : 'api';
             $token = auth($guard)->login($user);
 
-            return view('auth.callback', [
-                'token' => $token,
-                'user' => $user
-            ]);
+            //Set refresh token in cookie
+            $cookie = cookie('refresh_token', $token, config('jwt.refresh_ttl'));
+
+            return response()
+                ->view('auth.callback', compact('token', 'user'))
+                ->withCookie($cookie);
+
         } catch (\Exception $e) {
             \Log::error('Social login error: ', ['provider' => $provider, 'error' => $e->getMessage()]);
             return view('auth.callback', [
