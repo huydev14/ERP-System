@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Services\OAuthConfigurationService;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAccountController extends Controller
 {
+
     public function redirect(Request $request, $provider)
     {
+        OAuthConfigurationService::load($provider);
         $type = $request->query('type', 'user');
 
         return Socialite::driver($provider)
@@ -20,6 +24,7 @@ class SocialAccountController extends Controller
     public function callback(Request $request, $provider)
     {
         try {
+            OAuthConfigurationService::load($provider);
             $socialAuthService = new \App\Services\SocialAuthService();
             [$user, $type] = $socialAuthService->handleProviderCallback($provider);
 

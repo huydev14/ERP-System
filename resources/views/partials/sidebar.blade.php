@@ -71,7 +71,7 @@
         </li>
 
          {{-- System configuration --}}
-        <li class="nav-item menu-open {{ request()->routeIs('users.*') ? 'menu-is-opening ' : '' }}"">
+        <li class="nav-item menu-open {{ request()->routeIs('audit-logs.*') || request()->routeIs('oauth-configs.*') ? 'menu-is-opening ' : '' }}">
             <a href="#" class="nav-link">
                 <x-icon-setting class="nav-icon" />
                 <p>Hệ thống
@@ -86,13 +86,13 @@
                     </a>
                 </li>
             </ul>
-            {{-- <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="" class="nav-link ">
-                        <p>Cài đặt</p>
+                    <a href="{{ route('oauth-configs.index') }}" class="nav-link {{ request()->routeIs('oauth-configs.*') ? 'active' : '' }}">
+                        <p>Cấu hình OAuth</p>
                     </a>
                 </li>
-            </ul> --}}
+            </ul>
         </li>
 
         {{-- <li class="nav-item">

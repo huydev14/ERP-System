@@ -10,6 +10,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\OAuthConfigController;
 
 require __DIR__ . '/auth.php';
 
@@ -88,6 +89,12 @@ Route::prefix('admin')->middleware('jwt.cookie')->group(function () {
         Route::post('/{id}/restore', [ProductVariantController::class, 'restore'])->name('restore');
     });
     Route::resource('product-variants', ProductVariantController::class);
+
+    // --- OAuth Settings -------------------------------
+    Route::prefix('oauth-configs')->name('oauth-configs.')->group(function () {
+        Route::get('/', [OAuthConfigController::class, 'index'])->name('index');
+        Route::patch('/{provider}', [OAuthConfigController::class, 'update'])->name('update');
+    });
 });
 
 // VueJS client
