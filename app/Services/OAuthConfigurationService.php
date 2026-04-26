@@ -17,12 +17,14 @@ class OAuthConfigurationService
         });
 
         if (!$config) {
-            throw new \Exception("Provider {$providerName} chưa được cấu hình hoặc bị tắt.");
+            return false;
         }
         Config::set("services.{$providerName}", [
             'client_id' => $config->client_id,
             'client_secret' => $config->client_secret,
             'redirect' => $config->redirect_uri,
         ]);
+
+        return true;
     }
 }

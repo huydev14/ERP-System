@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head><title>Đang xác thực...</title></head>
+<head>
+    <title>Authenticating...</title>  <
+</head>
 <body>
     <script>
         const payload = {
@@ -10,10 +12,7 @@
         };
         if (window.opener) {
             window.opener.postMessage(payload, "*");
-
-            setTimeout(() => {
-                window.close();
-            }, 100);
+            window.close();
         }
     </script>
 </body>

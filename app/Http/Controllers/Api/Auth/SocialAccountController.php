@@ -12,7 +12,9 @@ class SocialAccountController extends Controller
 
     public function redirect(Request $request, $provider)
     {
-        OAuthConfigurationService::load($provider);
+        if (!OAuthConfigurationService::load($provider)) {
+            return view('auth.callback', ['error' => "Dịch vụ " . ucfirst($provider) . " chưa được hỗ trợ."]);
+        }
         $type = $request->query('type', 'user');
 
         return Socialite::driver($provider)
