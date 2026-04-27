@@ -40,7 +40,7 @@ class OAuthConfigController extends Controller
             return redirect()->back()->with('success', "Cập nhật cấu hình " . ucfirst($provider) . " thành công.");
         } catch (\Throwable $e) {
             Log::error("Update {$provider} OAuth failed", ['error' => $e->getMessage()]);
-            return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng kiểm tra Log.');
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật cấu hình ' . ucfirst($provider) . '. Vui lòng thử lại.');
         }
     }
 }

@@ -42,8 +42,13 @@ export const useAuthStore = defineStore('auth', {
             if (this.token) {
                 return true;
             }
+            const savedUser = localStorage.getItem('user');
+            if (!savedUser) {
+                return false;
+            }
             //If don't have token, try to refresh it
             const refreshed = await this.silentRefresh();
+
             if (!refreshed) {
                 this.user = null;
             }
