@@ -22,7 +22,7 @@
 </div>
 
 @once
-    <script>
+    <script type="module">
         $(function() {
             // Open slide-over panel
             window.openSlideover = function(id) {

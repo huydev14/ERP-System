@@ -71,5 +71,5 @@
             showUser: "{{ route('users.show', ':id') }}"
         };
     </script>
-    <script src="{{ asset('js/pages/user.js') }}"></script>
+    <script src="{{ asset('js/pages/user.js') }}" defer></script>
 @endpush

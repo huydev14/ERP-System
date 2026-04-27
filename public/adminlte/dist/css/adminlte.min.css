@@ -1949,7 +1949,6 @@ pre code {
 .form-control:focus {
     color: #495057;
     background-color: #fff;
-    border-color: #80bdff;
     outline: 0;
     box-shadow: inset 0 0 0 transparent;
 }
@@ -3607,7 +3606,6 @@ input[type='submit'].btn-block {
         0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
-    border-color: #80bdff;
 }
 .custom-control-input:not(:disabled):active ~ .custom-control-label::before {
     color: #fff;
@@ -3747,7 +3745,6 @@ input[type='submit'].btn-block {
     appearance: none;
 }
 .custom-select:focus {
-    border-color: #80bdff;
     outline: 0;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
 }
@@ -3803,7 +3800,6 @@ input[type='submit'].btn-block {
     opacity: 0;
 }
 .custom-file-input:focus ~ .custom-file-label {
-    border-color: #80bdff;
     box-shadow: none;
 }
 .custom-file-input:disabled ~ .custom-file-label,
@@ -21135,7 +21131,6 @@ body.text-sm .input-group-text {
         0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 .custom-control-input-primary:focus:not(:checked) ~ .custom-control-label::before {
-    border-color: #80bdff;
 }
 .custom-control-input-primary:not(:disabled):active ~ .custom-control-label::before {
     background-color: #b3d7ff;
@@ -21443,7 +21438,6 @@ body.text-sm .input-group-text {
         0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 .custom-control-input-blue:focus:not(:checked) ~ .custom-control-label::before {
-    border-color: #80bdff;
 }
 .custom-control-input-blue:not(:disabled):active ~ .custom-control-label::before {
     background-color: #b3d7ff;
@@ -31163,7 +31157,6 @@ a.disabled.mailbox-attachment-close {
 .login-card-body .input-group .form-control:focus ~ .input-group-prepend .input-group-text,
 .register-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text,
 .register-card-body .input-group .form-control:focus ~ .input-group-prepend .input-group-text {
-    border-color: #80bdff;
 }
 .login-card-body .input-group .form-control.is-valid:focus,
 .register-card-body .input-group .form-control.is-valid:focus {
@@ -31659,9 +31652,6 @@ body.iframe-mode-fullscreen .content-wrapper.iframe-mode {
     padding: 0.46875rem 0.75rem;
     height: calc(2.25rem + 2px);
 }
-.select2-container--default.select2-container--open .select2-selection--single {
-    border-color: #80bdff;
-}
 .select2-container--default .select2-dropdown {
     border: 1px solid #ced4da;
 }
@@ -31692,11 +31682,7 @@ body.iframe-mode-fullscreen .content-wrapper.iframe-mode {
 .select2-container--default .select2-search--inline .select2-search__field {
     border: 1px solid #ced4da;
 }
-.select2-container--default .select2-dropdown .select2-search__field:focus,
-.select2-container--default .select2-search--inline .select2-search__field:focus {
-    outline: 0;
-    border: 1px solid #80bdff;
-}
+
 .select2-container--default .select2-dropdown.select2-dropdown--below {
     border-top: 0;
 }
@@ -31727,7 +31713,6 @@ body.iframe-mode-fullscreen .content-wrapper.iframe-mode {
     min-height: calc(2.25rem + 2px);
 }
 .select2-container--default .select2-selection--multiple:focus {
-    border-color: #80bdff;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     padding: 0 0.375rem 0.375rem;
@@ -31778,7 +31763,6 @@ body.iframe-mode-fullscreen .content-wrapper.iframe-mode {
 }
 .select2-container--default.select2-container--focus .select2-selection--multiple,
 .select2-container--default.select2-container--focus .select2-selection--single {
-    border-color: #80bdff;
 }
 .select2-container--default.select2-container--focus .select2-search__field {
     border: 0;
@@ -31851,19 +31835,10 @@ select.form-control-sm
     z-index: 9999;
 }
 .select2-primary + .select2-container--default.select2-container--open .select2-selection--single {
-    border-color: #80bdff;
 }
 .select2-primary + .select2-container--default.select2-container--focus .select2-selection--single {
-    border-color: #80bdff;
 }
-.select2-container--default .select2-primary .select2-dropdown .select2-search__field:focus,
-.select2-container--default .select2-primary .select2-search--inline .select2-search__field:focus,
-.select2-container--default .select2-primary.select2-dropdown .select2-search__field:focus,
-.select2-primary .select2-container--default .select2-dropdown .select2-search__field:focus,
-.select2-primary .select2-container--default .select2-search--inline .select2-search__field:focus,
-.select2-primary .select2-container--default.select2-dropdown .select2-search__field:focus {
-    border: 1px solid #80bdff;
-}
+
 .select2-container--default .select2-primary .select2-results__option--highlighted,
 .select2-primary .select2-container--default .select2-results__option--highlighted {
     background-color: #007bff;
@@ -31878,7 +31853,6 @@ select.form-control-sm
 }
 .select2-container--default .select2-primary .select2-selection--multiple:focus,
 .select2-primary .select2-container--default .select2-selection--multiple:focus {
-    border-color: #80bdff;
 }
 .select2-container--default .select2-primary .select2-selection--multiple .select2-selection__choice,
 .select2-primary .select2-container--default .select2-selection--multiple .select2-selection__choice {
@@ -31896,7 +31870,6 @@ select.form-control-sm
 }
 .select2-container--default .select2-primary.select2-container--focus .select2-selection--multiple,
 .select2-primary .select2-container--default.select2-container--focus .select2-selection--multiple {
-    border-color: #80bdff;
 }
 .select2-secondary + .select2-container--default.select2-container--open .select2-selection--single {
     border-color: #afb5ba;
@@ -32523,19 +32496,10 @@ select.form-control-sm
     border-color: #f083ab;
 }
 .select2-blue + .select2-container--default.select2-container--open .select2-selection--single {
-    border-color: #80bdff;
 }
 .select2-blue + .select2-container--default.select2-container--focus .select2-selection--single {
-    border-color: #80bdff;
 }
-.select2-blue .select2-container--default .select2-dropdown .select2-search__field:focus,
-.select2-blue .select2-container--default .select2-search--inline .select2-search__field:focus,
-.select2-blue .select2-container--default.select2-dropdown .select2-search__field:focus,
-.select2-container--default .select2-blue .select2-dropdown .select2-search__field:focus,
-.select2-container--default .select2-blue .select2-search--inline .select2-search__field:focus,
-.select2-container--default .select2-blue.select2-dropdown .select2-search__field:focus {
-    border: 1px solid #80bdff;
-}
+
 .select2-blue .select2-container--default .select2-results__option--highlighted,
 .select2-container--default .select2-blue .select2-results__option--highlighted {
     background-color: #007bff;
@@ -32550,7 +32514,6 @@ select.form-control-sm
 }
 .select2-blue .select2-container--default .select2-selection--multiple:focus,
 .select2-container--default .select2-blue .select2-selection--multiple:focus {
-    border-color: #80bdff;
 }
 .select2-blue .select2-container--default .select2-selection--multiple .select2-selection__choice,
 .select2-container--default .select2-blue .select2-selection--multiple .select2-selection__choice {
@@ -32568,7 +32531,6 @@ select.form-control-sm
 }
 .select2-blue .select2-container--default.select2-container--focus .select2-selection--multiple,
 .select2-container--default .select2-blue.select2-container--focus .select2-selection--multiple {
-    border-color: #80bdff;
 }
 .select2-indigo + .select2-container--default.select2-container--open .select2-selection--single {
     border-color: #b389f9;
@@ -42619,7 +42581,6 @@ a.text-muted:hover {
 .accent-primary .custom-file-input:focus ~ .custom-file-label,
 .accent-primary .custom-select:focus,
 .accent-primary .form-control:focus:not(.is-invalid):not(.is-warning):not(.is-valid) {
-    border-color: #80bdff;
 }
 .accent-primary .page-item .page-link {
     color: #007bff;
@@ -43445,7 +43406,6 @@ a.text-muted:hover {
 .accent-blue .custom-file-input:focus ~ .custom-file-label,
 .accent-blue .custom-select:focus,
 .accent-blue .form-control:focus:not(.is-invalid):not(.is-warning):not(.is-valid) {
-    border-color: #80bdff;
 }
 .accent-blue .page-item .page-link {
     color: #007bff;
@@ -47115,4 +47075,3 @@ a.text-muted:hover {
 .dark-mode .border-dark {
     border-color: #4b545c !important;
 }
-/*# sourceMappingURL=adminlte.min.css.map */

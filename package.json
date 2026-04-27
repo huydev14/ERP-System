@@ -23,11 +23,17 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.2.0",
+        "@popperjs/core": "^2.11.8",
+        "bootstrap": "^5.3.8",
+        "chart.js": "^4.5.1",
         "datatables.net": "^2.3.7",
-        "datatables.net-bs4": "^2.3.7",
+        "datatables.net-bs5": "^2.3.7",
         "flag-icons": "^7.5.0",
         "jquery": "^3.7.1",
         "pinia": "^3.0.4",
+        "select2": "^4.1.0-rc.0",
+        "select2-bootstrap4-theme": "^1.0.0",
         "vue": "^3.5.32",
         "vue-router": "^5.0.4"
     }

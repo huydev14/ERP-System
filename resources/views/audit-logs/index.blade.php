@@ -44,7 +44,7 @@
     </x-modal>
 
     @push('scripts')
-        <script>
+        <script type="module">
             $(function() {
                 // ---- RENDER TABLE --------------------------
                 window.auditLogTable = new DataTable('#audit-log-table', {

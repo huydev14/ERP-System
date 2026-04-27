@@ -36,7 +36,7 @@
                 @foreach($providers as $p)
                     <a class="nav-link {{ $loop->first ? 'active' : '' }} fluent-tab-item tw-mb-1 tw-text-left tw-flex tw-items-center tw-gap-3 tw-border-none tw-w-full tw-bg-transparent"
                         id="v-pills-{{ $p['id'] }}-tab"
-                        data-toggle="pill"
+                        data-bs-toggle="pill"
                         href="#v-pills-{{ $p['id'] }}"
                         role="tab"
                         aria-controls="v-pills-{{ $p['id'] }}"

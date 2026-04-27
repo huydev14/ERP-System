@@ -17,12 +17,12 @@
 
     <ul class="navbar-nav topbar-actions">
         <li class="nav-item dropdown profile-menu">
-            <a data-toggle="dropdown" href="#" class="nav-link profile-link icon-btn">
+            <a data-bs-toggle="dropdown" href="#" class="nav-link profile-link icon-btn">
                 <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User">
                 <span>{{ auth()->user()->name }}</span>
             </a>
 
-            <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-end">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">
                     <i class="fas fa-user mr-2"></i> Profile
                 </a>
@@ -36,7 +36,7 @@
         </li>
 
         <li class="nav-item dropdown">
-            <a href="#" data-toggle="dropdown" class="nav-link icon-btn !tw-px-1">
+            <a href="#" data-bs-toggle="dropdown" class="nav-link icon-btn !tw-px-1">
                 <div class="tw-flex tw-flex-row ">
                     @if (App::getLocale() == 'vi')
                         <span class="fi fi-vn"></span>
@@ -47,7 +47,7 @@
                 </div>
 
             </a>
-            <div class="dropdown-menu dropdown-menu-right p-0">
+            <div class="dropdown-menu tw-right-0 tw-left-auto">
                 <a href="{{ route('lang.switch', 'vi') }}"
                     class="dropdown-item {{ App::getLocale() == 'vi' ? 'active !tw' : '' }}">
                     <span class="fi fi-vn"></span> Tiếng Việt

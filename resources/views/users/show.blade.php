@@ -158,7 +158,7 @@
 @endsection
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(function() {
             $('.fluent-tab').on('click', function() {
                 $('.fluent-tab')

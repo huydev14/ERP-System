@@ -1,19 +1,21 @@
-const loadingHtml = `
+window.loadingHtml = `
     <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-h-full tw-min-h-[300px] tw-text-gray-500">
         <i class="fas fa-spinner fa-spin tw-text-4xl tw-text-[#0063B1] tw-mb-4"></i>
         <p class="tw-text-sm">Đang tải dữ liệu...</p>
     </div>
 `;
 
-$(
-    '#f_status, #f_department, #f_employment_type, #f_role, #f_logName, #f_causer, #f_brandName, #f_categoryName, #f_isActive, #f_productName, #f_category, #f_brand, #f_product'
-).select2({
-    theme: 'bootstrap4',
-    minimumResultsForSearch: 5,
-    width: '100%',
+$(function () {
+    $(
+        '#f_status, #f_department, #f_employment_type, #f_role, #f_logName, #f_causer, #f_brandName, #f_categoryName, #f_isActive, #f_productName, #f_category, #f_brand, #f_product'
+    ).select2({
+        theme: 'bootstrap4',
+        minimumResultsForSearch: 5,
+        width: '100%',
+    });
 });
 
-function renderOptions(selector, items) {
+window.renderOptions = function (selector, items) {
     let $selector = $(selector);
     if (!items) items = [];
 
@@ -26,7 +28,7 @@ function renderOptions(selector, items) {
         html += `<option value="${item.id}">${item.text}</option>`;
     });
     $selector.append(html);
-}
+};
 
 globalThis.ModalHelper = {
     open: function (modal_id) {
@@ -67,7 +69,7 @@ $(function () {
     });
 });
 
-function previewBrandLogo(input) {
+window.previewBrandLogo = function (input) {
     if (input.files && input.files[0]) {
         let reader = new FileReader();
         reader.onload = function (e) {
@@ -76,4 +78,4 @@ function previewBrandLogo(input) {
         };
         reader.readAsDataURL(input.files[0]);
     }
-}
+};

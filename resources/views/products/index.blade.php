@@ -50,8 +50,8 @@
     </x-modal>
 
     @push('scripts')
-        <script src="{{ asset('js/pages/product.js') }}"></script>
-        <script>
+        <script src="{{ asset('js/pages/product.js') }}" defer></script>
+        <script type="module">
             $(function() {
                 @if (session('success'))
                     fluentToast({
